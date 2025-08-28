@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ワンナイトリート！</title>
+<style type="text/css">
+
+* { box-sizing: border-box; }
+body {
+	margin: 0 auto;
+	padding: 0;
+	font-size: 0.9rem;
+	color: #666;
+}
+header {
+	margin: 0;
+	background: #fff;
+	width: 100%;
+	position:fixed;
+	border-bottom: 1px solid #999;
+	padding: 6px 0;
+	color: #8A8A8A;
+}
+main { display: flex; margin: 0 auto; }
+#text { width: 1100px; margin: 50px auto 0; }
+footer { margin: 10px; height: 20px; font-size: 0.7rem;  text-align: right;}
+footer a { color: #aaa; text-decoration: none;}
+footer a:hover { color: #999 }
+
+h2 {
+	font-size: 0.9rem;
+	margin: 20px 0 8px 0;
+	border-left: 5px solid #000;
+	padding-left: 10px;
+}
+.nameList h2 { margin-top: 50px; }
+
+input[type=checkbox] {
+	transform: scale(1.3);
+	margin: 10px 8px 10px 3px;
+}
+dl {
+	display: flex;
+	flex-wrap: wrap;
+	border-bottom: 1px solid #e0e0e0;
+	margin: 0;
+}
+dt {
+	width: 18%;
+	padding: 0 10px 0 10px;
+	margin: 5px 0 5px 0;
+	font-size: 0.75rem;
+	text-align: right;
+	display: block;
+	border-right: dotted 1px #888;
+}
+dd {
+	width: 80%;
+	padding: 0 5px 0 10px;
+	margin: 5px 0 5px 0;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+.tab {
+	border-top: 1px solid #e0e0e0;
+	z-index: -1;
+	text-align: right;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding-top: -1px;
+	position: relative;
+}
+.tab span {
+	display: inline-block;
+	border-bottom: 1px solid #e0e0e0;
+	border-left: 1px solid #e0e0e0;
+	background: #f0f0f0;
+	font-size: 0.75rem;
+	color: #666;
+	padding: 2px 6px 0 8px;
+	border-radius: 0 0 0 12px;
+	margin-top: -1px;
+}
+
+/*------------------------------
+ ハンバーガーメニュー        -*/
+
+header .hcenter {
+	max-width: 1200px;
+	display: flex;
+	margin: 0 10px;
+}
+header h1 {
+	order: 2;
+	margin: 5px 0 0 80px;
+	padding-top: 2px;
+	padding-left:10px;
+	border-left: 6px solid;
+	height: 18px;
+	line-height: 1;
+	font-size: 1.1rem;
+}
+.drawer-hidden { display: none; }
+.drawer { order: 1; }
+.drawer-open {
+	display: flex;
+	height: 28px;
+	width: 26px;
+	align-items: center;
+	position: relative;
+	z-index: 100;
+	cursor: pointer;
+	color: #8A8A8A;
+}
+.drawer-open .menusub {
+	padding-left: 32px;
+	padding-top: 2px;
+	font-size: 1rem;
+	font-weight: bold;
+}
+.drawer-open span.menubtn,
+.drawer-open span.menubtn:before,
+.drawer-open span.menubtn:after {
+	content: '';
+	display: block;
+	height: 3px;
+	width: 25px;
+	border-radius: 3px;
+	background: #8A8A8A;
+	transition: 0.5s;
+	position: absolute;
+	margin: 0 0 0 auto;
+	text-align: right;
+}
+
+/* アイコン */
+.drawer-open span.menubtn:before { bottom: 8px;}
+.drawer-open span.menubtn:after { top: 8px;}
+#drawer-check:checked ~ .drawer-open span.menubtn {
+	background: rgba(255, 255, 255, 0);
+}
+#drawer-check:checked ~ .drawer-open span.menubtn::before {
+	bottom: 0;
+	transform: rotate(45deg);
+}
+#drawer-check:checked ~ .drawer-open span.menubtn::after {
+	top: 0;
+	transform: rotate(-45deg);
+}
+
+/* 中身 */
+.drawer-content {
+	width: 280px;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: -280px;
+	z-index: 99;
+	background: rgba(0,0,0,0.75);
+	transition: all .3s;
+	padding-left: 23px;
+	padding-top: 80px;
+	color: #fff;
+	overflow-y: auto;
+}
+#drawer-check:checked ~ .drawer-content {
+	left: 0;
+}
+.drawer-content ul { padding-left:0; }
+.drawer-content ul li { list-style:none; }
+
+
+/*------------------------------
+ 個別設定
+------------------------------*/
+.tc0 { background-color: rgb(248, 248, 248); margin-left: 10%; font-size: 0.8rem}
+.tc1 { background-color: rgb(255, 255, 255)}
+.tc2 { background-color: rgb(255, 255, 255)}
+.nc0 dt { color: rgb(136, 136, 136) }  /*  */
+.nc1 dt { color: rgb(34, 34, 34) }  /* KP */
+.nc2 dt { color: rgb(50, 175, 178) }  /* 久遠 悠介 */
+.nc3 dt { color: rgb(136, 136, 136) }  /* ★ */
+.nc4 dt { color: rgb(203, 64, 66) }  /* 出雲 脩喜 */
+.nc5 dt { color: rgb(136, 136, 136) }  /* 電視內容 */
+.nc6 dt { color: rgb(136, 136, 136) }  /* system */
+.nc7 dt { color: rgb(136, 136, 136) }  /* 佐山 櫻 */
+.nc8 dt { color: rgb(76, 175, 80) }  /* 小金井 刃 */
+.nc9 dt { color: rgb(136, 136, 136) }  /* ❚撒嬌要求投擲表 */
+.nc10 dt { color: rgb(136, 136, 136) }  /* ❚事件投擲表 */
+.nc11 dt { color: rgb(34, 34, 34) }  /* 小金井 */
+.nc12 dt { color: rgb(255, 87, 34) }  /* 凱薩 */
+.nc13 dt { color: rgb(103, 58, 183) }  /* 白鬼 */
+.nc14 dt { color: rgb(136, 136, 136) }  /* 【成長判定】 */
+.nc15 dt { color: rgb(233, 30, 99) }  /* 佐山 櫻 */
+
+
+.C, .S, .SU, .SP { color: #2196F3; }
+.F, .FA { color: #F50057; }
+
+/*------------------------------
+ レスポンシブ
+------------------------------*/
+@media screen and (max-width:1100px) {
+	#list { display: none; }
+	#text { width: 90%; }
+}
+
+@media screen and (max-width:810px) {
+	body { font-size: 0.85rem; }
+	#list { display: none; }
+	#text { width: 100%; padding: 0 5px; }
+	header h1 { font-size: 1rem; margin-left: 10px; padding-left: 0; border-left: 0; padding-top: 4px; }
+	.drawer-open .menusub { display: none; }
+}
+
+</style>
+</head>
+<body>
+<header>
+	<div class="hcenter">
+		<h1>ワンナイトリート！</h1>
+		<div class="drawer">
+			<input type="checkbox" id="drawer-check" class="drawer-hidden">
+			<label for="drawer-check" class="drawer-open">
+				<span class="menusub">MENU</span>
+				<span class="menubtn"></span>
+			</label>
+			<setction class="drawer-content">
+				<form autocomplete="off">
+					<div class="tabList">
+						<h2>タブ</h2>
+						<ul>
+							<li><label><input id=tc0 class="select_t" type="checkbox" checked>other</li></label>
+							<li><label><input id=tc1 class="select_t" type="checkbox" checked>info</li></label>
+							<li><label><input id=tc2 class="select_t" type="checkbox" checked>main</li></label>
+
+						</ul>
+					</div>
+					<div class="nameList">
+						<h2>発言者</h2>
+						<ul>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc0" class="select_n" type="checkbox" checked></li></label>
+							<li style ="color:rgb(34, 34, 34);"><label><input id="nc1" class="select_n" type="checkbox" checked>KP</li></label>
+							<li style ="color:rgb(50, 175, 178);"><label><input id="nc2" class="select_n" type="checkbox" checked>久遠 悠介</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc3" class="select_n" type="checkbox" checked>★</li></label>
+							<li style ="color:rgb(203, 64, 66);"><label><input id="nc4" class="select_n" type="checkbox" checked>出雲 脩喜</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc5" class="select_n" type="checkbox" checked>電視內容</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc6" class="select_n" type="checkbox" checked>system</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc7" class="select_n" type="checkbox" checked>佐山 櫻</li></label>
+							<li style ="color:rgb(76, 175, 80);"><label><input id="nc8" class="select_n" type="checkbox" checked>小金井 刃</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc9" class="select_n" type="checkbox" checked>❚撒嬌要求投擲表</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc10" class="select_n" type="checkbox" checked>❚事件投擲表</li></label>
+							<li style ="color:rgb(34, 34, 34);"><label><input id="nc11" class="select_n" type="checkbox" checked>小金井</li></label>
+							<li style ="color:rgb(255, 87, 34);"><label><input id="nc12" class="select_n" type="checkbox" checked>凱薩</li></label>
+							<li style ="color:rgb(103, 58, 183);"><label><input id="nc13" class="select_n" type="checkbox" checked>白鬼</li></label>
+							<li style ="color:rgb(136, 136, 136);"><label><input id="nc14" class="select_n" type="checkbox" checked>【成長判定】</li></label>
+							<li style ="color:rgb(233, 30, 99);"><label><input id="nc15" class="select_n" type="checkbox" checked>佐山 櫻</li></label>
+
+						</ul>
+					</div>
+				</form>
+			</section>
+		</div>
+	</div>
+</header>
+
+<main>
+<section id="text">
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc0"><dt></dt><dd>真ㄉ娃娃臉耶 可愛……</dd></dl>
+	<p class="tc1 tab"><span>info</span></p>
+	<dl class="tc1 nc1"><dt>KP</dt><dd>時間的流逝<br>本篇中二人各完成一次行動後視作時間過去1小時。<br>滿足隱藏條件時，會進入結局引導。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc0"><dt></dt><dd>oO(看起來好難</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>冷氣的聲音低聲作響，外頭的蟬鳴仍然作響。<br>　　　　　　　　　　　　　夏天還沒結束。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>某個鄰近假日的周五晚上，你待在家裡休息。<br><br>如同以往，你獨自吃飯、洗澡、處理作業、還有整理家務……等等。<br>無意間看了時間，發現指針指向深夜一點了。<br><br>啊、已經到了休假日了啊。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他待在房間還是客廳</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>客廳！</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(開始改圖</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>房間也可以wwwwwwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>要報復性熬夜嗎？<br>還是好好睡一覺，療癒管理美先坂那些笨蛋而積累的疲勞呢？畢竟最近準備學園祭的事情已經搞到焦頭爛額了，精神和身體實在都很疲倦。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>燈燈(這ㄍ房間還沒加</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>熬夜？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>燈燈應該好了 你等等可以按按看</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>比較下面有你家(你家)的布局</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「啊、已經這麼晚了？」伸了個懶腰，拿起遙控器將正在撥放的電影暫停，起身去倒杯水來喝。<br><br>電影只剩下最後一部份了，打算趁今晚直接看完。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好 謝大人！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>當你拿起水杯的時候，門鈴發出聲響，有客人來了──<br><br>凌晨一點耶！凌晨一點！<br>怎麼會有人在這時候按門鈴！</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「這個時間點？誰啊……」放下水杯，走到大門透過貓眼向外看。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>經過走廊，走向玄關。<br>透過門上的貓眼查看，有個兜帽拉得極低的高大傢伙站在外面。<br><br>怎麼回事啊，大半夜的！──實在是有夠可怕！<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>想著的同時，手機收到了誰傳來了的訊息。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你如果沒帶手機那就好笑了（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=10*5 POW (1D100&lt;=50) ＞ 43 ＞ 成功</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2  (1D2) ＞ 1</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我等等把平面圖縮小放到上面好了　應該比較方便</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>＆加ㄌ燈燈我自己完全沒有記得要用</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>立刻後退了幾步，並把玄關的燈關上，假裝現在沒人在家。<br><br>小心翼翼地拿出手機來看……天啊，早知道就不要大晚上的一個人看驚悚電影了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好可怕 救命</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>周五的晚上就是要嗨，你說對吧。<br>在心跳還有些紊亂時，手機螢幕上顯示著出雲脩喜的Line訊息。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>『學長，可以幫我開門嗎？』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>在你關上燈後，他又傳來了一則消息。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>『……晚安！』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>在你關上玄關的燈後，他立刻收回了『可以幫我開門嗎』那一條訊息。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>很可怕ｗｗｗｗ！？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>真的滿可怕的（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我剛看恐怖片(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>好可怕好可怕好可怕！？<br><br>雖然很想立刻回覆出雲的訊息，但依照自己從那些驚悚片得到的經驗，現在或許不該這麼輕舉妄動。<br><br>總之要先確認對方的身分！</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>『咳，你切西瓜遊戲玩到幾分了？』<br>雖然有些、不對，是非常突兀，  但還是先回了一句試探性的問句。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>窩燈燈</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹 切西瓜 我都沒再玩了我不知道幾分才是高分</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>阿喜玩不到3000分(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你的訊息過了幾秒鐘就被已讀了。<br>約莫三十秒後，他才傳了一個不高不低的分數給你。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>『自從放暑假開始，就沒有時間玩這個遊戲了……完全沒有進步呢！』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>現在時間是八月中下旬，暑假開始是七月中旬</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>日本人開學是八月尾巴到九月初<br>但有學園季（學園祭在九月十月的）的學校通常會在八月多就去學校弄佈景</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>啊、看這個分數，應該是出雲本人沒錯了！<br><br>但外頭的那人是不是出雲就很難說了，畢竟自己可沒印象有告訴過對方自己家的住址。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>『在門口的是你嗎？是的話……你比個YA？』</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>『咦？所以學長是故意關燈的嗎？』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他沒有回應你的問題，而是用問句回答問句。<br>他的手半抬，卻又放下了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=55 偵查 (1D100&lt;=55) ＞ 42 ＞ 成功</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>『現在、心情不是很好。』<br>『可能做不到那樣的事情……』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請問 外面下雨嗎</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>謝謝wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>外面傳來陣陣打雷的聲響，天氣似乎不太好。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ＫＰ每一張出雲脩喜都畫得不一樣</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（ＫＰ忘記畫領帶了）</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>這種說話方式，嗯，真的是出雲呢！</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ｏＯ靠邀阿！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「先、先進來吧……」看到門外的對方似乎濕透了的樣子，連忙開燈開門讓對方進來，「這個時間點，怎麼了嗎？」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>打開門後，確認了門外的人真的是他，是那個在天盟原學院校內看起來高傲到不行的『皇帝』！<br><br>……是發生甚麼事情，這個人才會在半夜淋成落湯雞、還跑來自己家裡啊。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長……」像是嘟噥的聲音，拉著自己的帽子低垂著頭。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>非常不好意思我去確認原劇本，因為我覺ㄉ某ㄍ地方怪怪ㄉ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>你的頭為什麼沒有出來！</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>因為我沒有畫有帶帽子ㄉ差分（幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>(笑惹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好吧雖然很荒謬但劇本就是這樣　我開一下東西</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>打開門後，一直低著頭的出雲脩喜突然把頭抬了起來。<br>你們視線相交，他的眼睛捕捉了你的身影。<br><br>請點＜判定按鍵＞。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">RESB(10-10)  【★當前判定】  (1d100&lt;=50) ＞ 78 ＞ 失敗</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（把頭抓爛</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>抱歉(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>總覺得被直盯盯地望著，怪不好意思的。<br><br>那紅色的瞳仁深深地望著自己，感覺好像會被吸進去，又好像自己早就已經待在他的眼底了一樣。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>窩　窩看一下機制</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>窩　窩以為後面才會用到</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>窩　窩（摔倒</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好wwwww</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>要RPㄌ再說聲</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>(把ㄋ扶起來</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒沒沒事這裡還還還不用判定吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>可以繼續ＲＰ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>窩確認好ㄌ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「等等喔。」拉著出雲進到玄關後關上門，接著把對方放置在原地，自己則是往房內小跑離開。<br><br>「喏、先擦一下？」到浴室拿了條乾淨的毛巾回來，遞給對方後才再次問道，「怎麼突然過來了？發生什麼事了嗎，脩喜？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（救命啊人太好了吧）</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>和你對上視線的天盟原皇帝蹙起眉頭，露出很不好意思的表情。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「這麼晚來打擾學長真的非常抱歉。」<br><br>垂下頭，頭上的帽兜也跟著落得更低了一點，「這麼晚來找你，是有些事想跟久遠學長、…….想跟悠介前輩商量。」<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「只是我、還需要做好一點心理準備。」苦惱地單手扶著額頭，深深嘆了口氣。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他接過你給的毛巾，輕輕地按在自己的帽兜、外套、背包上，接著小心翼翼地將毛巾還給你。<br><br>雖然出雲的模樣看起來有些奇怪，但他一直都是個好像在思考什麼的怪人……大概是真的有什麼煩惱吧。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd></dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「知道了，那先進來坐吧。」接過毛巾，順便伸手替出雲取下背包，領著對方來到客廳。<br><br>「要喝熱水還是熱茶？」拿起遙控器將電視螢幕先關上，順便把冷氣也關掉。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>啊啊啊啊我剛剛錯過ㄌ很多差分隊嗎</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死wwwww還好 分(?)也沒差很多(對</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>滿室靜謐迎接著你們的到來。<br>光線還帶著些許昏暗，正合剛才看恐怖電影的氛圍與現在的時間。<br><br>在你的招呼下，他有些拘謹地跪坐在地板上，雙手又把兜帽拉低了一些。<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「如果有綠茶的話，就麻煩學長了。我想喝熱的。」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「好。」沒有多說什麼，只是默默地將出雲的書包放在沙發旁，走去打開電熱水壺的開關。<br><br>「跟家裡聯絡過了嗎？」回浴室把毛巾清洗過後，再把綠茶茶包放進馬克杯，用熱水沖泡後端來給對方。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>聽見你的疑問後，他尷尬地縮起身子，接著乾笑了幾聲。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「聯絡過了。」手指不安分地扯著膝蓋上的布料，「不過我說謊了。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「所以想請學長幫一些忙。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他尷尬地移開視線，像是下定了決心一般摘掉了兜帽。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你的目光被他露出的臉吸引住了……更準確來說是他的腦袋瓜。<br><br>如果你已經是個早已習慣了各種類似現象的愉快的調查員，說不定會覺得頭疼，怎麼又來了。<br><br>但很可惜，久遠悠介只是見過兩次克蘇魯生物的調查員而已。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「不知道為什麼我長出了狗耳朵……」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>就在他的頭上。<br>對，就在他的頭上，你沒看錯。<br><br>你看到那裡長了一對似乎能表達出他心情的耳朵，現在正縮著。<br><br>【SANC→0/1】<br></dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=55  SC (1D100&lt;=55) ＞ 14 ＞ 成功</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>狗耳。<br><br>顯而易見，這是食肉目·犬科·犬屬的哺乳動物中狗的耳朵。<br>它的最大特徵大概就是敏銳的聽覺吧。<br><br>據說狗耳的聽覺範圍是人耳的4倍。人類只能聽到最高20,000赫茲的聲音，而狗能聽清最高50,000赫茲的聲音，分辨聲音強弱的能力是人類的16倍，狗能夠判斷出32個方向的聲音，而人類只能分辨出16個方向的聲源。<br><br>此外，那等同於人類耳垂的耳郭是由許多肌肉組成，所以耳朵可以自由地朝向各個方向。靠著這個耳郭，狗耳可以成為一個「集音器」，有效率地發揮作用。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>．<br>．<br>．<br>．<br>．<br><br>好了，你的腦海頓時陷入宏大的宇宙中，回憶起了不知道哪裡聽來的雜學知識。<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>也許是感受到了你的視線，那隻耳朵突然動了一下。<br><br>雖然很難以置信 ……<br>但看來這個狗耳並不是裝飾品。<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我想說、是不是我做了什麼，才變成這樣的……」聲音即為彆扭，再次把視線轉走。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「喔、喔……喔？」不敢置信地楞了一會，對方似乎是認真的？<br>雖然出雲一臉委屈的模樣，不過那狗耳實在是……有些太適合他了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>改錯BGM</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>不知道有什麼適合的</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「什麼時候變成這樣的？有感覺嗎？」努力憋住不要真的笑出來，同時伸手搓揉看看對方的狗耳，確認一下真實性。<br><br>絕對不是因為自己想摸摸看，絕對不是。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>順手想改看看發現自己不是KP(廢話</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他頭上的那對耳朵暖呼呼的。<br><br>這到底是個什麼構造，狗耳好像確實是從頭頂長出來的。<br>正常人長了耳朵的地方被一層光滑的皮膚取代，看來不是長了4隻耳朵。<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你順了順他的狗耳朵，那對耳朵卻猛地彈了一下。<br>感受著手裡微微的暖意，你明白這下面是有血管的，而這耳朵確實是真的耳朵，你真確地意識到了。<br><br>【SANC→0/1】<br></dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=55  SC (1D100&lt;=55) ＞ 9 ＞ 特殊</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>原來不是KP不能改</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>?</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>ㄟ 好像可以 是嗎？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長，你是不是覺得我這個樣子很好玩。」不滿地發出抱怨。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>但其偶ㄅ確定劇本接下來ㄉ調性(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那對狗耳朵耷拉著。<br>除了長了狗耳以外，出雲脩喜乍看之下好像沒什麼地方不一樣……<br><br>▼可以對其使用的技能:<br>・＜生物學＞or＜知識＞<br>・＜心理學＞or＜靈感＞<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>貼貼本</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒有什麼可怕的</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>一次骰完嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>讓出雲講一下話好了</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「說起來，因為學園祭的關係，大家都留守到半夜……但那時候也沒什麼奇怪的事情、也沒有人跟我說耳朵怎麼了。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「所以我想是……走著走著就變成這樣了。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「原本還因為半夜沒人，走在空蕩蕩的街道上，心情很好的。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>骰子的話 一起骰或分開骰都可以</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>廁所!</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「我沒……咳、只是覺得有點可愛而已。」嘴上這樣說，另一隻手也不由自主地摸了上去另一邊的耳朵。<br><br>「尾巴……沒有嗎？」探頭看了看對方身後，眼神中帶著些許期待，「不過，你這樣可以喝綠茶嗎？咖啡因……」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">CCB&lt;=60 KNOW (1D100&lt;=60) ＞ 89 ＞ 失敗</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 33 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 13 ＞ 特殊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>雖然KP的圖上畫了尾巴，但出雲脩喜的狗尾巴並不存在。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>能感覺到出雲看起來非常地坐立不安。<br><br>畢竟他現在處於這種特殊的境況，從這一點來想也並沒有哪裡不自然，但就算這麼說，他表現得也太焦躁了。<br><br>他從剛才開始手上的小動作一直沒有停過，似乎非常緊張。<br><br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>哪有那ㄇ小wwwwwww</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶沒辦法編輯ㄋㄉ角色Rwwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我忘記了(詩意第一名)</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>太好笑了 沒有傑圖</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……」別開久遠的手，接著又不斷地扯著自己的外套袖口，「學長，我只是長出狗耳朵了，並不是真的犬類！」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 1 ＞ 決定性的成功/特殊</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「抱歉抱歉，以防萬一嘛。」收回雙手，稍微冷靜了些。<br><br>「和佐山說過了嗎？如果你們之前都待在一起的話，說不定他會知道些什麼？」拿出手機，開始尋找佐山的號碼，「或是問問看你們學校那個、那個……一刻直老師？他應該很了解要怎麼處理這種事吧。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>預想：成功的話叫成一直刻老師 失敗叫保健室老師(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「你想和佐山學長說嗎？我知道你們一直都有聯繫。」伸出毛躁不安的手，嘗試搶過手機。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>幹好好笑</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>久遠有想要繼續打給佐山嗎？<br>如果有的話，請幫我過敏捷對抗。對抗骰為RESB(15-11)。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>只想傳訊息要骰嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>對 因為阿喜不想讓你傳訊息</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">RESB(15-11) 沒有察覺對方的意思所以骰8 (1d100&lt;=70) ＞ 69 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(尖叫</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>差一點</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>看來耳朵上長出狗耳朵並不會讓動作變快。<br>久遠悠介成功找到佐山的聯繫方式，並無意間躲開了出雲想要搶走手機的手。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「嗯？你跟佐山不也天天見面嗎？」沒有什麼特別的意思，只是單純闡述事實。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「不過這個時間打過去不太好，先傳個訊息看看好了。」正準備要用手機打字時，像是突然想到什麼一樣放下手機，「不對，由你來說可信度比較高吧？」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>繼續伸手想要拿走手機，但久遠就是躲的開出雲的攻勢。<br><br>「這個模樣去那裡都很奇怪，被家人發現的話、我不敢想像那個後果。至於其他地方、外面什麼的……」支支吾吾，最後垂下雙手。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>.<br><br>　　　「學長，拜託嘛。」<br><br>.</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=10*5 POW (1D100&lt;=50) ＞ 46 ＞ 成功</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>說著，他十指交握做出一副祈禱的樣子看著你。那對狗耳朵別到了後面。<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「讓我在這裡留宿、不要告訴任何人我的狀況──可以嗎？」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……但你也不能這樣一直窩在這吧，之後不是還要去學校？」撓了撓後腦杓，不知道該拒絕還是接受，「不過時間也不早了，不然今晚先待在這看看狀況，明天要是還沒恢復的話，就去找一刻老師談？」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>「既然要留宿的話，就把外套脫了，先去洗個澡吧。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……學長一定是Ｔ人。」脫下外套，悶悶不樂地說著。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「變成這樣了，還是得做點什麼，想著想著就想到了久遠學長。如果是前輩的話應該會接受我這個樣子，我是這麼想的……。」<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「但我沒料到學長竟然一心一意想玩這雙奇怪的耳朵……！」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的狗耳向雙雙向後壓下，看起來就像飛機翼一樣，似乎是不太開心。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你知道嗎　我沒有找浴室的圖（幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>我有()&amp;可以帶過就好吧 沒有要送阿喜到浴室wwwww(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「好啦好啦，我保證不會再摸了，快去洗澡吧，別著涼了。」再次朝著出雲的頭伸出了手，不過這次只是揉了揉對方的頭，沒有碰觸到那對奇特的狗耳朵，「浴室在玄關進來的右手邊，櫃子裡有乾淨的毛巾。」<br><br>「啊、穿我的衣服可以嗎？我們體型應該差不多？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ｏＯ粉絲福利</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>耳朵突然地豎起來晃了晃，「可以嗎──！」看起來好像很開心的樣子。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>對於自己過於直率的反應嚇了一跳。<br>僵在原地，雙手半舉在空中，「咳、呃，我是說謝謝學長。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他說完之後就小碎步離開客廳了。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>坐回沙發和餐桌間的空位，再次打開電視，打算趁對方洗澡時，把電影剩下的部分看完。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>雖然聽出雲說了一遍來龍去脈，但他似乎什麼都不知道。就算向自己求助，但原因不明的情況下現在也沒有辦法做什麼。<br><br>要是耳朵它能自己消失就好了。<br><br>或是，如果一刻老師有方法就好了。不過，那個老師在暑假也會上班嗎?這個問題的答案先打個問號吧。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>唐突COC</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你打開了電視，電影正播放到緊張懸疑的部分。<br>纖白的手臂、漆黑的長髮、斑駁的血跡──</dd></dl>
+	<dl class="tc2 nc5"><dt>電視內容</dt><dd>「為什麼會變成這樣呢……」<br>「要是到了早上可以消失……就好了…………、」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你打ㄉ出電影內容 你就打 (幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好wwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>身為不看恐怖片ㄉ我感到異常心虛(幹</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc5"><dt>電視內容</dt><dd>一步、兩步。<br>主角在只剩下自己獨自一人的廢墟洋館來回奔波著，無論是對外的門扉和是窗戶都緊緊鎖上，唯一陪伴著主角只有散落在各地的屍體。<br><br>但為什麼、究竟是為什麼呢？<br>徘迴在身後的腳步聲，卻從來沒有停歇過。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠北啊 你好會打</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc5"><dt>電視內容</dt><dd>那不是人類的步伐該有的聲響，沉重、濕黏，在洋館老舊的地板上嘎吱拖行著。<br><br>最擾人的是，腳步聲總是伴隨著某些話語，那是不應該出現的、已經死掉的屍體們生前的聲音──</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>沒了 阿喜可以出聲ㄌ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>唐突地，客廳的門被打開了。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>沒有注意到其他地方的聲響，還在緊張地盯著畫面，看看主角轉身後會看到什麼。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>客廳有門？(幹ㄚ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那雙耳朵輕輕地晃著，甩著水滴。<br>出雲脩喜抬起頭望向久遠悠介，然後湊向前一把抓住久遠的肩膀。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>日本ㄉ客廳 滿多都有ㄉ!</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>哦對 看到ㄌ 剛好被小喜遮住wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你們視線相交，他的眼睛捕捉了你搖晃的身影。<br><br>他的眼睛閃爍著橘紅色的光輝，像是要燒起來一般，瞳孔收縮成一道細長的縫隙，宛如夜行貓科動物的豎瞳。<br><br>但那只是瞬間罷了。<br><br>眨眼間，他的眼睛又恢復了原狀——清澈的紅色，瞳孔也回到正常的圓形。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我跟你說 我現在只是放我沒聽過的BGM (ㄅㄌㄎ:幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死 營造氛圍？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>那我找一下 (好多我沒聽過ㄉ歌</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「臭傢伙、看招！！」由於持續處在緊張狀態，突然被出雲抓住的瞬間一不小心用往常扮演著的帝王態度直接喊了出來，甚至差點一拳揮到對方臉上。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「啊……抱歉，剛好看到正精彩的地方……」指了指眼前已經在播放片尾清單的電視，有些尷尬地向出雲解釋道。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶才要幹……(ㄅ小心按到送出丟臉痛哭</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>ㄑ洗手間難過一下(幹啊</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>難過完ㄌ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>當久遠還有些不自在地解釋時，出雲輕輕地別開那隻揮向他的拳頭、突然地向前探身。<br><br>他用單手壓著久遠的肩膀，將對方壓制在沙發上。<br>來不及反抗，久遠的視角就轉了一百八十度。<br><br>遙控器咖搭地掉落到地上，電影的片尾清單被切掉換成別的頻道了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹 太難過了吧</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>要死ㄌ 皇帝大人放過小ㄉ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd></dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>喔放錯地方</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你躺臥在沙發上，眼前只剩下出雲脩喜的臉。<br><br>他把手放到你的胸口上。<br>那雙鮮紅色的眼睛瞇起，輕柔的、甜蜜的，像是糖果一樣的。<br><br>你隱約想起自己真正認識他的那一天，自己同樣撐著雙手，用相同的姿勢望著他的模樣。只是現在立場反過來了。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「悠介前輩、」<br><br>「……我可以吃掉你嗎？」<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>帶著心馳神醉的目光，出雲脩喜靠著你的肩頭。<br><br>等一下，怎麼突然就這樣了？<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>【SANC→0/1】</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=55  SC (1D100&lt;=55) ＞ 35 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你......</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>是不是也真ㄉ很喜阿喜....</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>笑死wwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(抓濫投</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 時間點 : 1 → 2</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……餓了？」似乎是已經習慣對方時常突然冒出來的胡言亂語了。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>現在時間，剛好凌晨兩點。<br><br>出雲湊近久遠身旁的同時，輕輕地搖了搖頭、又點了一下頭，這樣反覆的答案讓人難以理解他想要表達什麼。<br><br>他偶爾會將視線投向你。<br><br>他眸光炯炯閃爍著光輝，那似乎不是你的錯覺。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「餓了，可是不是那種餓。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的犬齒擦過你的脖子，令人有些發癢。<br>因為你沒有反抗，所以，他確實地把吻落在你的頸上。<br><br>帶著啃咬。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>▼可以對其使用的技能:<br><br>・＜偵查＞or＜靈感＞<br>・＜心理學＞or＜知識/2＞<br>・＜生物學＞or＜靈感＞</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>食物是我？</dd></dl>
+	<dl class="tc0 nc7"><dt>佐山 櫻</dt><dd>得高溫殺菌……</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(升天</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>一次骰ㄇ 需要RPㄇ(混亂</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>老大！還不行！</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你可以先ＲＰ在看看要骰什麼</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>或是先骰再ＲＰ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我看了一嚇不衝突</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>很棒喔我們有跑７面（幹</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>我是被咬了嗎？食物是我？雖然長出狗耳但其實是變成吸血鬼了嗎？<br><br>腦中一片混亂，但又不敢輕舉妄動，畢竟這可是那個刀刀下狠手的天盟原皇帝啊！</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好快！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……要吃點什麼嗎？我去弄？」愣了好幾秒，才緩緩開口說道，並輕輕地、輕輕地試圖推開出雲，想觀察對方的表情來了解現在的情況。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 11 ＞ 特殊</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">CCB&lt;=35 心理學 (1D100&lt;=35) ＞ 45 ＞ 失敗</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 92 ＞ 失敗</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>嚇得不清</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你輕輕推開他，看見他的瞳孔微微放大，這似乎是出於一種興奮狀態。<br><br>為了讓他冷靜下來，應該確實地安撫他。<br><br>但果然還是先拉開距離，會更安全一點。畢竟現在這個樣子，連話都沒辦法好好說。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>雖然不確定出雲在想什麼，但他看起來有些恍惚。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長這個時間通常會吃什麼。」因為久遠離開自己了，所以就縮起身子，抱著膝蓋縮在沙發上。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲還是一臉迷醉地看著你，但從會對你的話作出反應這一點來看，他並非全無理智。<br><br>姑且可以嘗試和他對話。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D3 (1D3) ＞ 1</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>在你發送前</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我可以請你按ㄍ判定按鍵嗎</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">RESB(10-10)  【★當前判定】  (1d100&lt;=50) ＞ 88 ＞ 失敗</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>謝謝</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(好可怕</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>雖然知道對方可以溝通，但總覺得腦子一陣暈呼呼的。<br>像是體力被蒸發了一樣。</dd></dl>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ 久遠 悠介 ] MP : 10 → 8</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>天 魅魔？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>這不是那樣的本（幹</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「嗯……這個時間通常不會吃東西了？」看了眼電視角落顯示的時間並關掉，兩點確實是該準備上床休息的時間了。<br><br>「吃過晚餐了嗎？」伸手撫上出雲的額頭，有些擔心對方是不是因為淋雨而發燒了，「冰箱裡有晚上做好放著的燉牛肉，熱一下應該可以配土司吃？」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「不然……魚肉香腸應該也還有，看你想吃什麼。」  努力回想冰箱裡有些什麼，但腦袋卻有些恍惚。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>在你關掉電視前，過個偵查或是聆聽吧。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=57 聆聽 (1D100&lt;=57) ＞ 26 ＞ 成功</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>因為快速地關掉電視，所以只看到了一些關鍵字。<br><br>新聞內容：<br><br>『……近日，島根縣的漁業業者及觀光業者發現，長期駐守在竹島上的韓國海洋警察廳人員、漁業管理官員以及當地居民全數失蹤，島上空無一人。……』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我是不是不該關電視 抱歉wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>比起新聞，有更令你在意的事情──那就是出雲脩喜。<br><br>你還在解釋晚餐或是消夜的事情，卻發現他的背後、腰部那個位置突然膨脹了起來。仔細一看，發現那好像是尾巴的東西。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那個東西像是從尾骨那個地方長出來的，突然從衣服裡鑽了出來，像是受不了拘束似的，它一個勁地搖來搖去，似乎能夠反映出主人現在的心情。<br><br>啊，沒有錯呢。<br><br>那確實是一條蓬鬆柔軟的尾巴。<br><br>【SANC→0/1】</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>窩滴天 立刻抱你去找保健室老師……</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒事　不是很重要的資訊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=55  SC (1D100&lt;=55) ＞ 11 ＞ 特殊</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹　久遠悠介</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你真的很愛狗</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>嘿嘿(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>？<br><br>或許是我一直誤會美先坂的帝王了。<br>美先坂的帝王見過兩種神話生物，而且都難以用言語形容。<br><br>狗尾巴從身上長出來這種事情，對你來說還是太可愛了。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……燉牛肉是前輩做的嗎？早上起床的話，想吃。」點點頭，微微地笑了起來。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd></dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請問 我摸他體溫正常ㄇ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>不好意思 我補在主頻道</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>感恩</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你的手覆蓋在他的額頭上。<br>他的體溫有點高，但說是發燒──好像又不至於。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>電視沒有關掉了我是該把新聞全部補上去嗎 好好笑</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>電視ㄇ有關掉ㄌㄇ？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>不 還是關了 我的眼睛怎ㄇ長的</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>救命嚇死wwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「脩喜、後面……」神色有些凝重地指了指出雲身後，那毛絨絨的大尾巴，「會痛嗎？有沒有不舒服？」<br><br>內心緊張萬分，開始擔心是不是因為自己先前給對方喝了綠茶，所以才會變成這樣。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我要備他ㄉ邏輯嚇死</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我才要被皇帝ㄉ邏輯嚇死</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「後面……尾巴也長出來了？」歪歪頭，接著把尾巴向前彎了彎，輕輕撫弄自己黑帶紅的蓬鬆尾巴。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好可愛ㄋㄟ(在幹嘛</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「總覺得有些好笑呢，明明是為了讓耳朵消失的，尾巴卻跟著長出來了。」說完之後，微微瞇起眼睛，盯著久遠看。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>忘記燈燈</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好像喝醉 這個太溫和了不是我的皇帝(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我這裡應該會算你一ㄍ行動（技能）我一ㄍ行動（做了需要判定的選項）是一個小時</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>嘶......</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>紙娃娃的錯(靠北</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>廁所地N次</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹 我OOCㄌ?(上完廁所清醒?<br>讓我想想要怎ㄇ挽救 (有辦法?</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>真ㄉㄇ ㄋㄅ要被偶影響ㄟwwww</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>雖然偶視覺ㄉㄊ可能已經精神異常ㄌ(畢竟只有帝王SC</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「好笑嗎……萬一、我是說萬一，你之後真的變成了狗怎麼辦……」也伸手摸了摸出雲的尾巴，確認眼前的情況是不是自己的幻覺，看上去有些緊張，「真的不用先連絡佐山或老師看看嗎……」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>尾巴，是真的。<br>毛髮柔順，帶著一絲動物的味道，味道溫溫的不難聞。<br><br>但當你把手覆上去之後，那長長的尾巴就纏繞在你的手腕上，像是不想讓你離開。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「變成狗的話果然還是會有點難辦啊。」輕輕用尾巴搔弄久遠的手臂。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>緩緩地朝著久遠伸出手，「但、在那之前，果然還是想吃。」把手掌覆在久遠的臉頰上。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>看來他沒有打算回應你關於佐山或是老師的問題呢。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……好吧，你等會。」無奈地站起身，往廚房的方向走去，打算先拿魚肉香腸來讓對方止個飢。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>『抱歉這麼晚打擾，如果方便的話，想問一下你們今晚學園祭的準備情況。』<br><br>到冰箱前再次拿出手機，傳個訊息給佐山。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>休ㄇ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你向前走著。<br><br>但出雲脩喜像是沒了皇帝的框架（又或是說一直都沒有），他的尾巴依舊纏繞著你，然後，在你傳訊息的時候，把頭掛在你的肩膀上。<br><br>那狗耳朵輕輕搔癢著你。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我說了，不是那種餓。」輕輕側過臉，把嘴放在久遠的耳朵旁。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的呼吸同樣騷亂你的耳邊。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>看你</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>最晚到六點半</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>雖然我一直看起來神智不清（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好wwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「那是哪種餓？」不解地轉過頭看向出雲，然後像是想起什麼一樣說道，「你……該不會想吸血？」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>帶著一絲不解的表情，接著微微促起沒頭，笑著說：「什麼啊，又不是吸血鬼。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我只是，一直、一直、一直──很想吃掉前輩而已。」微微瞇起的紅色杏眼，依舊帶著笑意看著你。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>好了　看您有沒有要回　我ㄉ精神與骨肉分離</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>您要休可休wwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「可我又不是食物……」輕輕戳了戳出雲的眉頭，把對方稍微推離自己，「真的沒有別的想吃的？也有水蜜桃喔。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「水蜜桃……喜歡是喜歡，但不吃前輩就滿足不了啊。」聲音變得有些低沉，染上了一層沮喪。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「可是我還不想死……而且也不想痛……」超沒志氣地說道，毫無帝王樣。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>超ww好www校www</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>差點說你吃小ㄐㄐ不行ㄇ(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>笑醒</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>你問啊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……那學長給我其他的東西吧，因為我想被滿足。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他把頭埋到久遠的肩上，你看不見他的表情。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「其他東西？你想要什麼？」因為擺脫不了出雲，只好就這樣拖行著對方，回到沙發上，「還是把刃給你？感覺他就算被吃了也會沒事。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>救命wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「不是那樣的。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「再這樣下去，總覺得這份飢餓永遠無法得到滿足。」一手握上自己的胸口，用力扯動胸口的布料，「這裡永遠都是空的。」<br><br>「從那一天開始、從那個時候開始──」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>緩緩地站穩身子，將雙手壓在久遠的肩膀上，「得不到滿足、得不到回應，很難受。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我只是想得到滿足。只是想被你愛而已，為甚麼裝傻。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你能感覺到他站在你身後，帶著一絲令然不安的氣息。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>燈楞楞楞</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 59 ＞ 成功</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>沒裝傻(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>隨便一滑發現我ㄉ廢話很多</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>s1d2 (1D2) ＞ 2</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「脩、脩喜……？」轉過身看著出雲，雖然有些擔憂但更多的是不知所措，不知道對方現在的狀態到底正不正常，自己又該不該去和老師聯絡，「那、你想要我怎麼做？這樣放著不管真的沒問題嗎？」<br><br>「我是真的擔心你的情況……」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>腦袋休？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「所以，悠介前輩。」<br><br>他的指尖輕輕地點在久遠的臉頰上：「如果你不愛我，就讓我吃掉你吧。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他如此說著，緩緩地歪頭盯著你看。<br>雖然行為舉止看起來很冷靜，但眼睛裡卻閃爍著危險的光芒。<br><br>從他的眼神中你能夠感覺到，他沒有絲毫要放開你的意思。<br>要說的話，你總覺得好像發生過類似的事情──一個人的性格與思考陷入了異常，那是什麼時候？<br><br>先不管那個了，光是這麼繼續對話下去，只會在同一個話題上來回兜圈子，這樣也沒什麼意義。必須讓出雲轉移一下注意力才行。<br><br>過靈感。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 30 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好　休</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>不休（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(神王再臨？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>是怎樣wwww</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>大人請休</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>據他所說，他將你推倒的行為是為了「吃」。<br>但要說這是捕食行為，又顯得漏洞百出。<br><br>你不禁對此感到疑惑。<br><br>捕食對象就在眼前，反覆拉開距離再湊近，這實在說不上是什麼上策吧。<br>雖然對你的拒絕與行為表示了不滿，卻還是乖乖等著你的許可，不輕舉妄動，就這些行為來看，全部都更讓人疑惑了。 <br><br>他的舉動彷彿就像是一隻面對著自己飼主的狗。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他剛才說，他只是想被愛。<br>既然如此，說不定可以用別的方法來滿足他的飢餓。<br>儘管沒有什麼確切的證據，也不能繼續這樣僵持下去。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我看到ＣＯＪ的破洞邏輯的時候</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>一開始沒注意到的破洞的時候</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我現場裂開</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死wwwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>抱歉好ㄌ　我ㄅ會再繼續ㄌ</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>快休8 辛苦ㄌ！！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>壓迫感好重！壓力好大！<br>這種感覺比起狗不如說是狼吧，不過狼也算是犬科，這樣的話……</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「剛剛不是說給你其他東西也可以嗎？脩喜你想要什麼呢？」無論是搔腹部還是尾巴似乎都有騷擾的嫌疑，最後決定用雙手捧起對方的下巴撓了撓，順便讓對方的那張嘴和自己保持距離。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>改台詞改道封掉忘記切話面</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>還好咪wwwww<br>太累ㄉ話也可以明天再跑？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>順著你的動作，出雲露出了幸福、卻有些寂寞的表情。<br>接著他側過頭，讓臉頰整個覆上久遠其中一邊的掌心，如同撒嬌的狗狗一般。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……你會、愛我嗎？」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的口吻有些脆弱，但表情明顯不是在開玩笑。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我想要得到學長的喜歡、學長的觸碰，更多的、更多的……」耳朵微微垂下，尾巴也無精打采地順著沙發垂落。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「得到學長的疼愛的話，我有自信不會再讓你擔心。」把雙手覆上久遠的雙手。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲脩喜的狗耳直立前傾，他的雙手輕輕拉起久遠的指尖放在自己下巴的，又歪了歪頭，等待著你的回應。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒事 我可以 我只是改到短封(幹<br>沒有很累</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我也短瘋(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>為甚麼 (靠北當事人不能短封嗎</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>那個1D8+DB+1D4的人說要吃掉我耶！</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你會被啃到連骨頭都不剩吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但他ㄉ攻擊是１ｄ８＋ｄｂ＋１</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「愛你是指……結婚嗎？但我們只是高中生耶……」雖然依然處於不明就裡的情況下，總之先努力撓弄出雲的下巴。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(KP發瘋)</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「不過如果是指摸ㄍㄡˇ……幫你摸摸的話，這我倒還算有信心。」想起對方先前似乎因為自己那些類似對待狗的舉止而不滿的模樣，趕緊改口，但反而聽上去有些奇怪。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那雙牽引著你的指尖的手，將你的掌心放在他的臉夾兩側，像是捧著他一樣。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「不是摸狗。不單純是摸摸而已，是愛我。」稍微瞇起眼睛糾正了幾乎沒有差別的字句，「結婚的話，法律上還沒有通過那樣的事情。而且，在恢復原狀之前我也不想離開這裡。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的狗耳朵與尾巴晃了晃，像是在表達搖擺不定的心思一樣。<br>接著，那雙眼睛彎成了新月，破顏一笑。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd class="SU">sCCB&lt;=19 心理學  (1D100&lt;=19) ＞ 15 ＞ 成功</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我會為了感到恐懼的學長忍耐。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>像是看穿你的心思，他帶著淺淺的笑意說著。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>你也知道啊 那不就是故意的！！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「作為交換，你要好好疼愛我。」<br>「──把我當成出雲脩喜，當成一個人，而不是寵物。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「——不然，我就會把你吃掉，可以吧？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>燈愣</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>1D2 (1D2) ＞ 1</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 可以嗎 (1D2) ＞ 1</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>KP跟你說，KP前面都覺得他不知道(情報暴露)</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死 狗ㄉ直覺突然發作ㄌ是8</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但骰子告訴我他知道</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>死狗因仔</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「脩喜就是脩喜，我本來就沒有把你當寵物啊……」有些無奈地愣了一下，接著再次揉了揉出雲的頭，輕聲笑了笑，「哪有這麼不聽話的寵物啊。」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「那還請你指導一下，我應該怎麼做吧，天盟原最聰明的『皇帝大人』？」疼愛這個詞對自己來說實在是有些陌生，就算想行動也不知該從何下手。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他愣愣地聽著你說的話，然後像是感到些許荒謬地笑了。<br>那表情像孩子，或是說毫無戒備的、脩喜。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>找ＢＧＭ找到好無助（幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>wwwwㄋ需要什麼類型ㄉ</dd></dl>
+	<p class="tc1 tab"><span>info</span></p>
+	<dl class="tc1 nc1"><dt>KP</dt><dd>★★★讓PC盡情疼愛吧FEVER TIME ★★★<br><br>接下來PC每採取一次行動即視作過去了1個小時。<br><br>因為很難定義怎麼才算是行動，所以具體可以由雙方自行決定，比方說一段RP告一段落之後，或者事前決定好投擲技能的次數，次數一到就算行動結束等等。<br></dd></dl>
+	<dl class="tc1 nc1"><dt>KP</dt><dd>現在的時間原本預設是AM2:00。<br>但因為KP誤判，所以此房間改為AM3:00。<br><br>PC最多可以進行3次行動，到了AM6:00劇情就會結束，進入最後的結局。在那之前，希望能夠好好疼愛你眼前的乖狗狗。<br><br>行動內容沒有指定。<br>可以商量之後，按喜歡的做法讓PC疼愛KPC應該會比較好。<br>但按照自我意識RP，不疼愛也是一種方式。請按照喜歡的方式演繹吧。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(放置PLAY？</dd></dl>
+	<p class="tc1 tab"><span>info</span></p>
+	<dl class="tc1 nc1"><dt>KP</dt><dd>KPC的撒嬌要求：<br>完成撒嬌要求與事件，兩者並行並且進行RP。</dd></dl>
+	<dl class="tc1 nc9"><dt>❚撒嬌要求投擲表</dt><dd>1：想被PC觸碰。想被摸摸抱抱。<br>2：想和PC玩。想要PC一直理我陪我。<br>3：想聽PC說喜歡我。想主動對PC表示好感。<br>4：在PC身邊就好安心。想緊緊貼著PC。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(這些感覺都做了</dd></dl>
+	<p class="tc1 tab"><span>info</span></p>
+	<dl class="tc1 nc10"><dt>❚事件投擲表</dt><dd>1：睏得揉了揉眼睛，難得跟PC在一起，睡著了就太浪費了。對了，不然跟PC提個要求看看能不能膝枕吧。<br><br>2：總覺得肚子很餓。想和PC一起吃飯（零食）。<br><br>3：想到平常一直在PC身邊的人，嫉妒心起。忍不住跟PC鬧彆扭。<br><br>4：外面突然傳來好大的聲音！嚇了一跳。外面像是在打雷，看起來一時半停不了。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>都是參考而已 劇本怕大家不知道要做什麼</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>&amp;你之後可以知道為何你都做了(靠北</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「悠介。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲突然地、喊了你的名字，露出了幸福至極的笑容。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>有時候都覺得你可以插話 如果有需求可以跟我說</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>內心是今井ㄉ聲音突然決ㄉ有點DOKI(PLㄅ是PC</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他之前叫過一次他的名字</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>真ㄉ是滿doki的</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>什麼時候？PL失憶 請幫忙IDEA(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ㄟ 如果你沒有想插話我可以繼續貼啦</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶要插wwwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>喔 在延長賽那哩!</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>ㄛㄛ！</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>久遠要求的，說叫前輩或是學長很生疏，既然他都叫他名字了，那出雲也該叫他的名字吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>出雲背棄不了輩分差的觀念 最後才叫他悠介前輩</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶記得wwwww原來ㄅ是因為害羞(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「我在？」雖然不知道出雲為什麼突然不叫自己前輩了，但還是立刻應聲。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>只叫了一次，因為想要讓久遠停下腳步<br>&amp;單純是輩份差 運動社團裡滿講究的</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「不，果然還是叫你久遠學長吧。」傻呼呼地笑了。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>久遠或許已經看慣了出雲在你面前露出有如注視著心愛的東西的表情，又或許這是你第一次正視他這樣的模樣。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「悠介、悠介前輩、久遠學長？嗯——我還是喜歡叫你前輩。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>像是在反覆品味你的名字一般，他含含糊糊地呼喚著你。<br>接著，他緩緩地鬆開他一直抓著的你的指尖，朝著你的方向緩緩地伸出了手。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好ㄉ 有想要做什麼嘛!</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>說:你可以插<br>也是我:一直貼</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>笑死 等偶插一下(LODING</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好ㄉ慢慢來</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>之後如果需要插入 你唐突ㄉ在主頻道輸入 :「我插」也可以(幹<br><br>因為我不好ㄉ習慣是習慣打好一串再看閒聊</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>文盲需要KP指點一下學長跟前輩ㄉ差異</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>日文沒差</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但中文上念起來與感不同，所以你可以......ㄟ我想一下</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>啊我知道了</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>因為帝王想講很靠北ㄉ東西偶很糾結(是想講啥</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>悠介、悠介sanpai、久遠san</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>中間的輩份差一感覺更明顯，其實動漫以外很少人實際這樣用</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KK</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你講啊</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我又要去廁所</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>san就是一個.........小小的尊稱，在職場上的先生小姐的感覺，學校裡的同學、學長、學姊等等</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>回來了(整ㄍ聊天室都是我去廁所ㄉ痕跡)</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「我是無所謂啦……不過只叫前輩兩個字的話，很容易跟佐山搞混的吧？」盯著出雲的臉看著，那是自己熟悉的、總是覺得讓人安心的眼神，「所以，你是希望我叫你後輩……嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑出來</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>微微把耳朵向後壓，尾巴也垂了下來，「那樣就是……出雲君、或是脩喜君？」歪歪頭。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「叫前輩的話，有時候真的會讓身旁的人有點困擾吧。」尾巴緩慢地往左側擺動。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他沉默地望著你一會兒，接著原本僵在半空中的手繼續動了。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「那、悠介學長。」眨了眨眼。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的指尖觸碰到了你的喉嚨。<br><br>被觸碰的時候，身體自然而然地緊繃起來。但別說發出聲音了，你連動一下身體都做不到。你無法將目光從他的眼睛上移開。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>窩要被掐死惹？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我以後就這樣叫你，可以嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>久遠雖然僵住不能動，但稍微可以說話</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>有什麼遺言嗎</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>叫ㄇ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>破喉嚨</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>破喉嚨不會來</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>雖然很不明顯　但其實這張一直都是小虎牙</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶是說ㄋ要打叫ㄇ&amp;偶知道 內心嚎叫過好幾次ㄌ(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>喔喔喔喔！！好謝謝<br>沒有發現　好好笑　還在接梗</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「沒什麼不行的吧。」不知道為什麼身體完全動不了，雖然出雲今天沒帶著標誌性的劍袋，但還是覺得有些緊張，「不過，比起出雲君或脩喜君……」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>「我可能還是比較喜歡叫你脩喜。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>比較習慣(好</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我也、比較喜歡那樣。」淡淡地笑了，尾巴輕輕地左右晃動著，耳朵也看起來放鬆了起來。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那紅色的眼中，映入了你的臉龐。<br>他確確實實地、用寵溺的表情望著你、望著久遠悠介。<br><br>——不是帝王，不是率領美先坂的領導者，而是最真實的你。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>像是玩鬧、又像是安撫。<br><br>那些許粗糙的指尖順著你的皮膚緩緩向下移動——<br>喉嚨、喉結、鎖骨，以及胸口，他輕輕撫弄了一陣你的皮膚。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你可以叫，但不能動</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你有要叫嗎<br>沒有我就繼續騷擾你了</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>隔著衣服嗎 還是伸進來ㄌ(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>下巴到鎖骨ㄉ位置　都是皮膚　還沒伸進去（還沒）</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「脩、脩喜……？」想起出雲先前說過要吃掉自己的宣言，本能性地想退開，身體卻依然動彈不得，能感覺自己的心跳聲逐漸增大，「不、不是說要讓我疼愛你嗎？你還沒跟我說該做什麼呢……」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他沒有回應你的問題。<br><br>那豎起的狗耳朵，很明顯就是有聽見你說的話語。<br><br>而他的動作也沒有停下。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>沒事 我習慣ㄌ……(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你是不會怕癢的。<br>可那樣的觸摸，令你寒毛豎起、全身發癢的同時感到一陣酥麻。<br><br>直到你黑白相間的衣領被微微下拉，晃動的銀色綴飾發出了聲音，他才停下了動作。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>WWWWWWWWWWWWWWWW(哭啊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>在一陣彷彿連呼吸聲都能聽清的靜寂之後，那不聽話的傢伙慢慢地開口了。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我想要更多、想要觸碰更多前輩，對我來說那就是疼愛。」<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「但同時，我也一直在思考，自己是不是不該有這種想法呢……」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他終究垂下了眼眸，就跟你認識的出雲脩喜一樣。<br>臉上掛著堅定的神情，實際上卻思考很多——不自信、懊惱，甚至是些許的懺悔。<br><br>但你同時也知道，他是會說著這些不自信話語，做出衝動行為的人。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>對，你知道。<br><br>他是那樣危險的傢伙。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我知道(好</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D3 (1D3) ＞ 3</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好多選項</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd class="FA">CCB&lt;=75 IDEA (1D100&lt;=75) ＞ 82 ＞ 失敗</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「這……」就算出雲這樣說，接下來他會怎麼做又是另一回事了，更別說現在要是不這樣做，自己說不定真的會被『吃掉』，那不如先由自己來掌握主導權比較好。<br><br>雖說要掌握主導權，實際上卻也不知道該怎麼做就是了。<br>突然間，腦中突然冒出小金井平常嚷嚷著想對佐山做的各種事，但大概是沒認真聽過的緣故，感覺能確切想起來的也不多。<br><br>不過自己畢竟不是小金井，沒有那種褲子不穿好就到處跑的勇氣，掙扎了好久才終於開口問道：</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「那、要……抱一下嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我會笑死</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>窩很努力ㄌ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那雙耳朵微微晃動著，看上去沒什麼規律的方向。<br>最後他將身擺向前，輕輕地環抱住你。<br><br>為了看清楚你的表情，他稍微拉開了距離。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「我真的很喜歡、喜歡悠介學長。」<br>「一直很渴望，渴望能和你有更多相處、更多接觸。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「——是前輩的存在讓我的腦海變得一蹋糊塗。怎麼樣都覺得不夠、想更靠近一些。」音量漸小的同時，別開了視線。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>這些話是在對你說的嗎，還是他只是在自言自語呢？你沒有辦法下結論。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「悠介學長說不可以吃掉，所以我會好好忍住的，因為我不想讓你感到害怕。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>(看著畫面大笑</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd><br>「可是，一直忍著的話好難受。所以……就一點點——」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>不准笑!!</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>透過他微張的嘴，那如同櫻桃色的舌頭映入你的眼簾。<br><br>　　　話音未落，他直接吻了你。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>請點【判定按鍵】進行判定。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">RESB(10-11)  【★寵愛判定按鍵】  (1d100&lt;=45) ＞ 11 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（眼神黯淡的看著你）</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>是怎樣wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的舌頭碰到了你。<br><br>半張著眼眸的出雲脩喜，他的眼中有著燃燒般的光輝。<br>眸光燦燦，貫穿你的視線、有如牢籠般將你困住。<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>有一種奇妙的感覺在心中漾起。<br>彷彿自己飄在空中，又像是隨水波搖晃。<br><br>同時，你感覺到腦海深處一陣發麻。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>但那不過是一瞬間的事。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>啪嘰。<br>你聽到像是什麼東西崩裂的聲音，模糊的思緒如霧般漸漸消散。<br>同時，你緊繃的身體也恢復成能自主行動的狀態了。<br><br> ……剛才，到底為什麼會有那種感覺呢？<br><br>【SANC→1/1d3】</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=55  SC (1D100&lt;=55) ＞ 10 ＞ 特殊</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？我精神勇猛</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠邀阿我不懂</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請問他是舔我還是喇機ㄌ(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>親你的嘴唇</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ 久遠 悠介 ] SAN : 55 → 54</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>那為什麼要伸舌頭!!!!!!!</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你看向出雲，他正一臉愕然地盯著你看。<br><br>他意識到你的視線後，微微垂下頭，一副快要哭出來的樣子。<br>他的手鬆開了，表情都扭曲了。<br><br>嘴唇微動輕聲地說「為什麼」。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>舔了你的嘴唇</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>哇塞 親ㄌ還不滿意 ㄅ愧是你</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他還不會那麼難的事情</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(校ㄌ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>為了降低KPC的撕卡機率，你要將這個當作一個行動嗎？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 (1D2) ＞ 1</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 行動次數 : 0 → 1</dd></dl>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 時間點 : 2 → 3</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「#$&amp;)*&amp;%(*)%&amp;$_@(_$)(#&amp;%)@*(」說不出話、完全說不出話，只是一臉不可置信愣在原地，口中發出不成字句的聲音。<br><br>為什麼？自己才要問為什麼吧？<br>這可是自己的初吻耶……不、這個或許不是很重要。<br>要是被佐山知道的話自己會被砍死吧……這個似乎也沒有那麼重要。<br><br>那重要的到底是什麼呢，自己也不知道，腦中一片混亂。<br>是被那不知道是狗還是狼的變化影響了嗎，還是說……</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「這、這就是疼愛你的意思嗎？」直到下顎有些發痠，才終於開口問道。<br><br>老實說方才回憶中的小金井確實也說過類似的話語，只是沒想到竟然真的得做到這一步。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>小金井說過什麼<br>親親小寶貝嗎</dd></dl>
+	<dl class="tc0 nc11"><dt>小金井</dt><dd>想跟櫻同學十指交扣！！緊緊擁抱！！還要啾～～</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲的尾巴像是在表達沮喪般地、無力地垂著。<br>他的嘴巴一開一合，卻沒有吐露出任何字句，反倒是發出了「嚶嗚」一般的聲音。<br><br>他緩緩地點了點頭、下垂的耳朵讓他看起來更沮喪了。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>但隨即，你聽到了一個很輕的聲音。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好想奏他</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>啪唧、啪唧。<br>很快地，你發現聲音是從出雲那個方向傳來的。<br><br>那是什麼聲音？<br>這樣想著，你將視線投向了出雲並掃視了一遍，發現他的指甲變得很鋒利。<br><br>不對，不光是這樣。<br>你發現他嘴裡的牙齒也在改變。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>窩滴天</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>因為距離很近，所以不用仔細觀察就能注意到。<br>現在簡直能用獠牙來形容他的牙齒了。<br><br>【SANC→1/1d3】</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>腦中的帝王突然好油 不知道偶打不打得出來(汗</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>？？？？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>請！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="SU">CCB&lt;=54  SC (1D100&lt;=54) ＞ 40 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他到底是怎樣</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我才是亞則吧(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ 久遠 悠介 ] SAN : 54 → 53</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我跑團就會依直喝水　所以腦袋的廁所ｔｉｍｅ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>怎ㄇㄌ</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>CCB&lt;=85  SC (1D100&lt;=85) ＞ 14 ＞ 特殊</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶要SC(靠北</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠邀</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「等等。」看到出雲的變化後，面色瞬間凝重了起來，直覺告訴自己這樣下去不行。<br><br>既然已經知道該怎麼做了，自己就沒有覺得尷尬或是不好意思的餘地了。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……失禮了。」深深吸了口氣，沒等對方回應就用力握住對方的手臂，直接反過來親了上去。<br><br>說是親吻或許不太正確，自己只是努力回憶著在各種電影中看過的畫面，不斷吸吮舔舐對方的雙唇、汲取對方口中的氧氣罷了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>裂開的是我</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「感覺……怎麼樣？有好一點了嗎？」直到喘不過氣，才終於鬆開出雲，戰戰競競地觀察對方的變化。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>竟然沒有準備閉眼ㄉ差分 可惜ㄌ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠北</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我　我　　幹　申請短暫休息（幹看到太多法庭律師劇情</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死  好 偶ㄑ倒水</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶ㄅ敢看上ㄑ 有錯字再跟偶說(幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠北　我　幹<br>我不知道為甚麼我當ＫＰ會被　被</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>玩弄（誰給你玩弄</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我是否要去問ＡＩ怎麼描寫接吻，我不行了</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我才被玩弄8!!!被親ㄌ還被嫌棄(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好吧　我真是感謝您<br>是真的感謝　但我我</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我想一下</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我想一下行動次數</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲脩喜楞神地著你。<br>微微皺起的眉頭，像是不明白這是怎麼回事。<br><br>但那豎起的耳朵，間接告訴你那不是討厭。<br><br>你的吻讓他呼吸困難，臉色紅潤。<br>他微微張著的嘴，不斷吸氣、吐氣，好似這樣能讓呼吸順暢一些。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>沒有用言語回答你的他，再次伸出了手。<br><br>因長期練習劍道而長繭的手，輕柔卻確實地撫上你的後頸，將你整個人接入他的懷中。<br><br>然後，他的唇與舌尖觸碰到了你。<br><br>出雲脩喜瞇起眼睛，舌頭拂上你的嘴角，在你的上唇游移。<br><br>他確實地舔了下去，像是侵略、像是標記。<br>你的唇齒被撬開，他探入了你的體內。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>往上看那句「他還不會那麼難的事情」</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>技術應該很糟吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>久遠可以動　但他有想幹嘛嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>等等我會一直貼描述（靠北</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>感受到柔軟又溫熱的觸感，本能性地想將身體往後縮，無奈自己的後頸被出雲控制住，只能默默地繼續承受。<br><br>感覺好奇怪、味道不會很糟吧、會不會咬到對方的舌頭呢。<br>內心只有這些雜亂又無意義的想法充斥著。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>得寸進尺(幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>補一下描述&amp;對得寸進尺</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(狼人ㄚ法</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>大腦深處一陣發麻，幾乎無法正常思考。<br><br>如果要用什麼來比喻的話，這種狀態大概很像是醉酒。<br>僅存的理性正努力地為你敲響警鐘，但那絲理性也很快就被吞噬了。<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>外面的雷聲很大，像是要下雨了。<br><br>你在載浮載沉的意識中，想起了他在你家洗澡的這件事情。<br>他穿的你的衣服、身上是你的味道，彷彿他就是、你的人。<br><br>但他在做的事情，毫無疑問就是捕食。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲的呼吸格外灼熱。<br><br>濕滑的觸感掠過你的肌膚，他偶爾會退開身子，像在撒嬌一樣用牙齒咬你。血是沒流，你也一點也感覺不到痛。<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長的表情，很可愛。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我要插(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>來不及插ㄌwwwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>啊 可以</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我編輯一下</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>給你!!</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>謝大仁</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我不是大仁哥(靠北多久以前ㄉ梗</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「什麼？」聽到可愛兩個字的瞬間，像是反射動作一樣，理智突然回神，直接推開出雲的肩膀拉開距離，「你、你在耍我玩嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>這樣會影響您ㄉ後續ㄇ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd class="SU">SRESB(14-16) 力量體型對抗 (1d100&lt;=40) ＞ 16 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好可怕(抖</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd class="SU">sccb&lt;=35 久遠心理學 (1D100&lt;=35) ＞ 11 ＞ 成功</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>救命wwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你成功推開出雲、並且拉開距離。<br>那瞬間，你看到的是有些驚訝的表情。<br><br>但他馬上笑出來了，你立刻察覺到他沒有嘲笑你的意思。<br>他真的只是很喜歡你而已。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「不是，不是耍人。」輕聲地說著，再次拉近距離。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他蜻蜓點水般地吻了一下久遠的唇。<br><br>終於，像是得到滿足，他輕輕地拉開彼此的距離。<br>那停留在你後頸的手撫弄著你的髮絲，出雲脩喜用寵溺的表情望著你。<br><br>可是，像鉛一樣沉重的倦怠，卻在瞬間支配了你的身體。<br><br><br>出於久遠先前的自發性，這裡不做【當前判定】。<br>而是僅限這次的骰數【MP-1d6】。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>請!</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D6 (1D6) ＞ 1</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>?</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ 久遠 悠介 ] MP : 8 → 7</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>平常正經本為什麼骰運沒這麼好</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 行動次數 : 1 → 2</dd></dl>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 時間點 : 3 → 4</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>到底是親了多久啊？<br>時鐘「咖」地一聲，提醒你們時間來到了凌晨四點。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>那個像你索吻的傢伙，手指輕輕點著他自己的唇瓣，臉上浮現出恍惚而滿意的神情。<br><br>「多謝款待。」<br><br>你似乎聽到他低聲說著這幾個字。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>感覺不影響就貼上去了　ㄋ可以繼續ㄉ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>s1D2 減少pow (1D2) ＞ 1</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒事你繼續</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>你這樣我很緊張(抖抖</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒事!!!www我在補骰東西</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「所以，好點了嗎？」沒想到會弄到這時間，有些尷尬地開始收拾整理出雲的外套和書包，起身放到窗邊能被早晨陽光照到的位置，像是想無視剛才那曖昧的氛圍一樣，「……該睡了。」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>暫時不想和出雲對上視線，只是用眼角餘光偷瞄對方身體有沒有稍微復原一些。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「可是、感覺很開心。」放輕腳步，跟到久遠身後。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的身體沒有恢復原狀。<br>尾巴仍然擺動著，耳朵也像是迷茫一般地左右晃動。<br><br>那尖銳的牙齒，雖然沒有割傷你，但仍然存在他的口中。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>低垂著頭，把雙手乖巧地背在身後，像是壓抑一般地抓著自己的手臂（久遠當然看不到）。<br><br>他接著小聲地說著：「其實，這是我第一次接吻，所以也不知道會讓久遠學長感覺到什麼……感受。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「討厭嗎？這種事情……」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(誰說以後要叫我悠介學長ㄉ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>救命啊太順口了</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他輕聲低語，聲音中藏著難以壓抑的興奮，那眼神與剛才宣告用餐結束的話語相反，仍然蘊藏著灼熱緊盯著你不放。<br><br>那副樣子簡直就像是看到獵物就在眼前的狼。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>請　請　（彎腰鞠躬</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑 救命(怎樣</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹　我一直在編輯　編輯玩又覺得很醜　（靠北啊不准編輯</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「討厭嗎？呃……感覺很奇怪？」用食指撓了撓自己的臉頰，實在是太羞人了，暫時還沒有勇氣去回想，「你也是第一次？真的？」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長是什麼意思……」有氣無力地問，尾巴卻高興地晃來晃去。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「總感覺……你很熟練呢。」想起對方的舌頭……不不不，還是什麼都不要想好了。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「那只是出於對喜歡的人的侵略性吧！熟練、不熟練什麼的……」尷尬地別過眼神，「我也覺得學長好像不是第一次啊。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「說到底，要不是學長『那樣』，我也不會做出那……不，我好像提前做了，對不起。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他說的『那樣』，大概是指「久遠主動親吻他」、或是「久遠親吻他的方式」吧。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「算了，總之……剛才的事別讓刃或是佐山知道。」輕咳一聲提醒道，畢竟自己不想被亂刀砍死，也不想讓兩人的事被傳遍大街小巷。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「先睡吧，起來後還得看怎麼處理你的情況呢。」領著對方來到走廊，稍微對著房間比劃了一下，「你想睡我房間，還是我爸的房間？我爸目前在國外，床鋪還是乾淨的，不用擔心。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>雖然看起來想要抱怨什麼，但還是在瞬間回答了：「學長的房間。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>劇本有26p，但有一串在描述結局，所以或許很快就可以進到結局了</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>聽起來好像不會掛掉 太好ㄌ(真ㄉ嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>結局之後是接劇情 不是普通封閉式COC/COJ(幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>腦袋的廁所TIME</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(開始哭</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>掛掉的機率我認為不太大</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我覺得自己昨天很像看錯考試範圍的、臨時抱佛腳的考生<br>但說到底，哪有考生只看一半的書</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「嗯，這邊。」打開自己房間的門讓出雲可以進去，順手打開了房間內的燈。</dd></dl>
+	<dl class="tc2 nc0"><dt></dt><dd>一眼望去，房間內乾淨整潔，只有些許的生活氣息，看來美先坂的帝王似乎更常在客廳活動。<br><br>而整個房間內最引人注目的，便是書桌上的某個小玩偶，看起來和先前夾給出雲他們的玩偶是同個系列的。<br><br>黑色的小玩偶有著亮紅色的眼珠，分不清像是小狗還是狼，表情兇得有些可愛，頭上還有著小小的皇冠。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「那晚安了，有什麼事就到隔壁找我。」說完便準備離開，似乎打算讓出雲獨自睡在自己的房間。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>兇得</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>是嗎(考慮好久</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶ㄉ手：兇ㄉ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd class="SU">SCCB&lt;=55 DEX (1D100&lt;=55) ＞ 40 ＞ 成功</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>立刻伸手抓住久遠的衣擺。<br><br>「不一起睡嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我也有些困惑</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我朋友是國中國文老師　他說這很難分　所以他都會打ㄉ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>（幹對我問ㄌ好多人，我記得你也是那樣說ㄉ</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>不是這樣吧wwwwww</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>但他有好好跟我解釋名詞複詞動詞</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>把有些去掉　後面是可愛　可愛是形容詞　那我就會用...得？<br><br>有些算什麼......量詞?</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>喔喔 理解ㄌ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>感覺快要進結局之後一陣放鬆 跟PC一起睡覺</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……認真？」看了眼自己的床鋪，雖然是外國尺寸，所以比一般單人床還要大了些，但要兩個將近190公分的大男生一起睡在上頭，或許還是過於勉強了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死 請吃完再睡(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「……想一直和喜歡的人待在一起不是正常的嗎？」平靜地闡述。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 (1D2) ＞ 2</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>今天ＫＰ桑要負責洗碗，他想逃避現實。</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>（開始塗抹學長的２）</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「那到我爸房間睡，這樣可以吧？」有瞬間覺得出雲跟小金井這兩人，某方面還真有點相似，「我可不想起床後發現自己被踢到地板上。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>休ㄇ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>啊　真ㄉ耶　但依樣可以到６點半</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>豪</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>放棄弄差分說ㄅ定來得及(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>歪歪頭，「他的房間是雙人床嗎？」</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「嗯，而且聽說是很高級的那種。」自己頂多只有幫忙整理，倒是沒機會睡上去過。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我排ㄌ三天　你ㄅ用擔心......或是我洗好碗一樣可以跑......晚九晚十</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>豪……！</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>促進KP大人洗碗(</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>超大雙人床(突然好想喊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>豎起耳朵，尾巴上下晃動著，「－－！雖然有些失禮，但既然是前ㄅ－－悠介學長說的，那我就恭敬不如從命了！」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒有要說什麼可以先進入普通ㄉ結尾......</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>豪</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>另外我想問他們幾點會起床</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(怎ㄇ會問我</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>出雲ㄉ身體感覺會自動起床(幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>幾點</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>七、八點...</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>日本人通常九點上課......</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>假日……(天盟原</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我ㄉ鬧鐘假日九點會響(好</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(猛然抓頭，腦子當機，還是六點??自主練習...</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我先ㄑ進結局好ㄌ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>choice[自然醒,提早醒,鬧鐘叫,睡過頭]  (choice[自然醒,提早醒,鬧鐘叫,睡過頭]) ＞ 睡過頭</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好 您請</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>為ㄌ省麻煩出雲你六點起床好ㄌ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹校死</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請叫我 謝謝皇帝大人</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>接著，你們一同前往久遠父親的臥室，一同入睡到天明。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>==============================</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D100 睡相 (1D100) ＞ 56</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>普通</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>找一下背景(靠找闢</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>是不是太早睡ㄌ(看了一下行動次數</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>那是上限 所以沒關係</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好可怕耶</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc6"><dt>system</dt><dd>[ KP ] 時間點 : 4 → 6</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>時間來到早上六點。<br>不知不覺天已經亮了，細碎的陽光從窗簾縫隙中漏了進來。<br><br>外頭響起的雷聲漸漸變弱了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ㄟ我看錯斷了 沒有可怕描寫 可以結局了耶</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>有點可惜但 好 你等等偶</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死wwwwㄅ介意插入可怕描寫(帝王：雅咩囉</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>嘶........我按著時間軸好了</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>沒事 您照您ㄉ方式來就好ㄌ！！</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>喔 放錯了 但不可怕請放心</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我們是✝️升天✝️ㄌㄇ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>遠方的天空泛起一圈圈水波。不對，不該說是水波，應該說天空在扭曲才對吧。<br>在扭曲、彎曲、向怪異的方向延展的空間後面，那個東西出現了。<br><br>一開始看起來只是煙霧狀的。<br>那不斷波動變化然後凝聚成型的東西，看起來彷彿匯集了整個宇宙的邪惡。<br><br>那東西的身體被藍色的膿包所覆蓋，每走一步膿水就會滴落地面。<br>隨風飄來的濃烈的屍臭味讓人一陣作嘔、理智受到了衝擊。<br><br>獵犬，這個單字在腦海中一閃而過。<br><br>電光火石間的思考。<br>這也許源自於經驗，又或許是對前方的未來有所預感。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>原來真ㄉ是狗呀 還是COC狗</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc12"><dt>凱薩</dt><dd>「真是夠了。為什麼派遣出來做這種麻煩事情。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc13"><dt>白鬼</dt><dd>「因為對你家上司來說，我們就是狗啊。聽話的狗。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>什麼時候有新員工ㄌ？？？</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>都是代號很有FU(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc13"><dt>白鬼</dt><dd>「不像人、也不是鬼，要不我去幫你把他殺掉吧？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>ㄏㄏ  虎牙 可愛(幹</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc12"><dt>凱薩</dt><dd>冷笑了一聲，「要是有那麼簡單，我早就用指虎把他的頭獵下來了。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>哦 所以六點一到就會出現這ㄍ 還醒著ㄉ話就會COC……的確很像會吸引教授ㄉ東西(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>大地在震顫。<br>不知是否在為應到來的存在而歡欣雀躍，狼群發出遠吠。<br><br>天空開始龜裂，不斷出現條條裂縫，彷彿在呼應那遠吠聲。天空一片接一片「被逐漸撕裂」的時候，令人生厭的氣息正在迫近。<br><br>不可以看。<br><br>但突然一聲巨大的東西碎裂一樣的聲音傳來。<br>接著，在被刺穿的天空中，有著一隻吞食月亮的野獸，吸引著探索者的目光。<br><br>人類無法辨識祂的外表。但要是用什麼來比喻的話，還是比較像狼。<br>那是統治著不同的時空和角狀世界的萬獸之王。祂與憎惡一同現身，將一切吞噬殆盡。一場巨大的災難，似乎即將降臨這個世界。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>野獸在眼前，為了將這個世界的萬事萬物吞噬殆盡，讓這個世界走向終結，祂亮出了自己的獠牙。<br><br>那碎裂聲再次響起。邊界此時此刻正在被破壞。區區一個普通人，你根本無法抵抗。<br><br>在生命的燭火即將熄滅時。你會想到什麼呢。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KP大人休ㄇ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc12"><dt>凱薩</dt><dd>「透。」</dd></dl>
+	<dl class="tc2 nc12"><dt>凱薩</dt><dd>「你這時候，一樣寫不出遺書嗎？」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>聽著你們的對話，白鬼呼呼地笑了。<br><br>即將迎來終末的探索者們，在一切走向終點之時看見了一束光穿透了天空。就像是要讓那佈滿裂痕的所剩無幾的黑暗徹底消失一般，比太陽還要炫目的光在天空中不斷擴散。<br><br>被染成純白色的世界中，有什麼消失了、有什麼被破壞了，但那都是單純的高中生們，不知道的事情。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>鬧鈴很吵，你醒了過來。<br>眼前是熟悉的天花板。<br><br>房間裡很黑……不對，窗簾忘記拉了，所以房間亮到不行。<br><br>……現在是幾點了呢？<br>鬧鈴響了所以應該是九點吧。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>可　可以休　（靠北我中間那段沒想過怎ㄇ放　結果變好久</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>後面短短ㄉ</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑wwww</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>豪 那晚上建？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>短到七點可以跑玩</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但你是何時吃飯</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>也是可以</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶還沒吃 主要看ㄋ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>娜先繼續好ㄌ！</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KK</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>久遠有要幹嘛嗎？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>很可怕wwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ＷＷＷＷＷ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「嗯……」整個人有些不太適應，伸手摸索著手機想要關掉鬧鈴。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你意識模糊，半夢半醒間伸手去摸自己的手機。沒找到手機就算了，手背突然卻碰到了什麼東西。<br><br>布料摩擦的聲音和微弱的呼吸聲傳入你的耳中。<br></dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「學長……？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我沒改這ㄍ啦！！！！</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>一個剛睡醒的沙啞的聲音叫著你的名字。那是出雲的聲音。      <br>意識到這一點的同時，你徹底清醒了過來。<br><br>對了，昨天長出狗耳的皇帝來了你家，然後……</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「脩喜！？」幾乎是喊出聲，連忙坐起身，然後才緩緩想起昨晚發生的事。<br><br>好丟臉，要是只是一場夢就好了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我可以看到他正常ㄌㄇ 還是要等描述(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他會往阿喜ㄉ方向看嗎</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>看呀 嚇ㄉ看過ㄑ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你循聲看去。<br>出雲側躺著，單手撐著頭，帶著笑意看著你。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>與昨天不同，昨天是脩喜笑著看著你。<br>今天倒是……讓你想起初次見面的『皇帝』。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「你都這個時間起床啊。」</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>他的頭上什麼都沒有，狗耳什麼的根本不存在。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你ㄉｑ版也變回來ㄌ　好可愛</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「啊、恢復正常了呢。」看到對方身上那些奇特的東西都消失了，不禁放下一百二十個心……或許還感到有些可惜就是了。<br><br>「怎麼，我可是帝王耶，誰還管我假日要幾點起床？」輕笑說道，但神情一點帝王樣也沒有，就只是很普通的笑著。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>微微地睜大眼睛，耳尖一下子紅了起來。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>方才還帶著餘裕的他無力地把臉埋進床單，呻吟般小聲嘟囔。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「只要學長記得那些都不是夢就好了。其他我都不會管。」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd></dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd></dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「什麼啊，我不知道你在說什麼耶。」做了個鬼臉，獨自留對方窩在棉被中，起身準備離開房間。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「喂！」立刻從棉被裡爬出來，坐直身體。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「好了，快去梳洗吧，不是說要吃燉牛肉當早餐嗎？」沒有理會對方的抗議，笑著離開了房間，打算先去梳洗並給燉牛肉加熱。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「為什麼學長………………啊、」垂下頭，有氣無力地站起身，望著自己身上的衣服，思考著久遠說的話。<br><br><br>「所以說是在欺負我嗎？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>可以……拉線？(阿喜：喂</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>一直想讓帝王問阿喜衣服合不合身 結果ㄇ機會www</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>不論答案如何，接下來是整天的假日，出雲有整天的時間可以探索這個答案呢。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>至於久遠要如何評價那被出雲脩喜折騰的一天，就看你自己了。<br><br>為什麼他會長出狗耳？這是誰幹的？目的又是什麼？<br>再怎麼思考也得不出結論。<br><br>儘管留下了這些謎團，你們還是回歸到了正常的生活中。<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ㄟ　後日談可以聊</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好啊</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但可以吃完飯繼續</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>但ㄋ先吃飯 對www</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>結局A：《狗狗走在路上也會挨棒打！》<br>（*日本諺語：意為不主動惹事就不會遭遇厄運）<br><br><br>【生還報酬】1d10 SAN恢復、害羞美好的回憶？<br></dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>＝開放擲骰＝</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D10 SAN回復 (1D10) ＞ 1</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>喂！</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>壓力很大(</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>不然ㄋ骰看看</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>因為出雲沒有扣到san，就不讓他回了。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>＝晚點是成長骰＝</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>1D10 虛無的成長骰 (1D10) ＞ 9</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>不是成長 是san</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>超歡</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc14"><dt>【成長判定】</dt><dd>久遠悠介：<br>聆聽、心理學、偵查<br><br>出雲脩喜：<br>心理學</dd></dl>
+	<dl class="tc2 nc14"><dt>【成長判定】</dt><dd>骰技能，失敗即可1D10成長。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd class="FA">CC&lt;=19 心理學  (1D100&lt;=19) ＞ 95 ＞ 失敗</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>1D10 (1D10) ＞ 2</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=57 聆聽 (1D100&lt;=57) ＞ 96 ＞ 致命性失敗</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>?</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd class="FA">CCB&lt;=35 心理學 (1D100&lt;=35) ＞ 76 ＞ 失敗</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>??</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>CCB&lt;=55 偵查 (1D100&lt;=55) ＞ 10 ＞ 特殊</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>熟悉ㄉ味道</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D10 聆聽成長 (1D10) ＞ 6</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D10 心理學成長 (1D10) ＞ 5</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>＝成長結束，往下是後日談＝</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>現在是早上九點。<br>位於日本千葉縣的郊區公寓住宅四樓，最左側的房屋──久遠家。<br><br>唰唰唰的聲音從盥洗室內（更衣室）傳出來。<br>面色憔悴的出雲脩喜正借用久遠家的備用牙刷，刷著牙。<br><br>啊，皇帝大人長出黑眼圈了呢。<br><br>但那一點都不重要。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>排版排到睏　還越排越醜（靠北</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>辛苦ㄌwwww排版真ㄉ好南……<br>(讀了兩次才看懂</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>真ㄉ是睏到連錯字都不管了（幹</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>要ㄅ要ㄑ休息www<br>晚上再跑也可以？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>廚房。<br>咕嚕咕嚕的聲音正在作響。<br><br>房屋雖然在郊區，但這個地區的房價還是很貴的。<br>為了妥善利用空間，久遠家的廚房是半開放式設計，連接著放著７０吋大螢幕的客廳。<br><br>燉牛肉的香氣存廚房飄散出來。<br><br>久遠悠介的臉上也掛著黑眼圈呢，想必是沒有睡好。<br>但如果用黑眼圈判斷他的狀況似乎不太妥當，因為身為帝王的他，臉上一直都掛著疲倦的黑眼圈。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>此時，久遠的手機傳來了震動聲。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>看鍋中的燉牛肉似乎已經熱得差不多了，便關上火爐，將手往圍裙上抹了幾下後，才拿出手機查看。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我看了一下　他到底有沒有傳訊息給佐山</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>有wwwwww</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>應該說 看皇帝有沒有阻止？<br>看起來是傳完才貼上來ㄉ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>當你拿起手機時，看見了佐山櫻傳了訊息給你。<br>要打開手機，確認看看嗎？</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他傳了什麼　我好害怕</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他那最後一次好像沒有阻止</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>『抱歉這麼晚打擾，如果方便的話，想問一下你們今晚學園祭的準備情況。』<br><br>到冰箱前再次拿出手機，傳個訊息給佐山。<br><br>ㄋ是說這ㄍㄇ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>還是問小櫻傳ㄌ什麼 小櫻ㄉ話窩也鋪知道(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>喔　對　為何我沒看見</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我很累？（幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>KP桑真ㄉㄅ休息ㄇwwww<br>ㄅ要勉強？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你不介意我慢慢來ㄉ畫　你可以ㄅ用把心神全部放這裡　我會記得燈燈</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KK</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>燈燈</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>嚥下一口唾沫，戰戰兢兢地點開螢幕，看佐山到底傳了什麼回覆過來。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>不點開還好，一點開就看見佐山的聊天室，顯示著超過十條的通知。<br>他大概在短時間內瘋狂傳送了訊息吧。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>為了營造效果 我先打一下佐山的內容 你可以點開之後會發現我過很久才RP</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>早死晚死都是要死，不對、天盟原的皇帝現在可是在自己手上，諒佐山應該也不敢對自己怎麼樣吧……應該吧。<br><br>深吸一口氣，先關上網路後，才點開了和佐山的聊天室。</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『貴安，失禮了，這裡是佐山。』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>雖然是訊息，但總覺得能看見他標致的臉上掛著那一貫的笑容。<br>第一條訊息看起來很正常，那之後呢？</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『雖然我，禮貌上是這樣的。不應該一次傳非常多訊息給他人，造成他人的壓力……這樣的事情，櫻也是非常不樂見的。只是、希望只是櫻的猜想……』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『出雲大人是不是發生甚麼事情了？』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『（困擾的貓咪貼圖）』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『今天一早，我收到了出雲家的聯繫，說是出雲大人來佐山家一趟了。但櫻怎麼看都沒有見到出雲大人的身影，所以……』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(寶包</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『出雲大人和學生會、以及班上同學關係都很好。不如說，全校同學都和出雲大人的關係非常不錯。櫻認為出雲大人是不會向父親大人說謊的。能讓他編造藉口、不惜後果也要欺瞞櫻、欺瞞家人的……』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『櫻認為只有久遠同學了。』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>可怕……</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『至於學園祭的事情，因為資料放在學生會內，所以目前櫻沒辦法給您確切的資訊。若是我能回答的問題，請久遠同學不用介意，直接提問吧。我會盡其所能幫助的。』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『啊，另外，請不要告訴櫻私底下還稱呼會長為出雲大人的事情。櫻只是太慌張了……』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『（貓咪微微鞠躬貼圖）』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>訊息目前傳到這裡的樣子。<br>按照時間標記，他或許還正在發送訊息也不一定。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>雙手捧著手機，不知道該如何是好。<br><br>猶豫了幾分鐘後，斟酌好該怎麼回覆後，才將WI-FI連線打開並送出自己的訊息。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>『他現在在我這沒錯，不用擔心』</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>『由他自己親自說明應該比較合適，你可以直接連絡他看看？』<br><br>經過一陣刪刪改改，最後還是把出雲已經醒了這句話刪掉才發送。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「喂、脩喜，你到底跟家裡說了些什麼啊？佐山他……總之，你先去看看手機吧。」大步走到盥洗室，帶著些許驚慌向出雲說道。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>你大步走往盥洗室，但關掉WI-FI後造成的訊息延遲，卻在此刻反撲而來。<br><br>你的手機瘋狂震動。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>是佐山，還是佐山的消息。<br>看起來是比你早發送的訊息。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>而出雲只是從盥洗室探出頭，嘴裡帶著泡沫，蹙起眉頭說著含糊不清的話語。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「佐山學長、家裡……？」聲音糊糊的，一手遮住嘴巴繼續說，「啊，完蛋了。」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>立刻縮回浴室，吐掉泡沫。<br>慌忙地衝到客廳翻找書包裡早就沒電的手機。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>至於久遠，你要面對你的手機嗎？</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>反正都要完蛋了，那也沒什麼好怕的了。<br><br>直接點開聊天室面對佐山！</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>好的，那你看到在你發送的訊息上面，有一小串消息。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>一小串</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『櫻目前聯繫不上會長……』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『雖然櫻沒有告訴朱雲家會長大人發生甚麼事情了，但是，櫻總覺得很奇怪。出雲大人確實是在和我道別後才離開的。那時候他的心情看起來很好。』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『櫻原本的猜測是、出雲大人是因為接下來的難得休息日感到開心……』<br></dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『但沒想到卻收到這樣的消息……』</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『所以櫻只能猜測，能讓出雲大人開心的相關人事物。除了天盟原的事情，櫻只知道久遠同學的事情能讓他開心一些。因為兩位的關係非常不錯。』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>在你發送訊息前，收到了這些聊天內容。<br>對，既然是聊天室，那這些都是聊天內容吧。<br><br>對，聊天。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>當然，你回應之後佐山也傳來了訊息。<br>理所當然地接在你的回應下面。</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『啊，果然是這樣嗎？』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>這句話接在「出雲在我這那」之後，看上去是同一分鐘內發的。</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『櫻會親自聯繫看看的。希望這次能打通電話。』</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>然後，就是現在。<br>你看到佐山又傳了個貼圖，是哭哭貓咪貼圖。</dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『出雲大人、沒有接電話。出雲大人真的在久遠同學那裡嗎？很安全嗎？兩位在做什麼？應該是安全的活動吧？』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>總覺得這好像是極楽寺家的佐山 但因為很慌張變成這樣好像也...不，點點點，極楽寺家的會看起來比較聰明(因為是你RP的</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>……好可怕，總覺得隔著螢幕也能感受到佐山的威壓了。<br><br>走去客廳拍了張出雲慌忙翻找手機的背影，尋速傳給佐山。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>『目前很安全，抱歉讓你擔心了』<br><br>『我之後會好好說說他的【小狗打招呼貼圖】』<br></dd></dl>
+	<dl class="tc2 nc15"><dt>佐山 櫻</dt><dd>『是真的出雲大人……』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>看起來好像還算親切 應該是我們家的小櫻8www</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>佐山簡單和你道謝之後，就說了不打擾兩位，之後會將學園祭相關的注意事項傳送給久遠。<br><br>至於出雲，他看起來很沒用地靠在牆上，嘴裡呢喃著什麼。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「手機、開不了機，也沒帶行動電源，我到底在做什麼呢……」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>店員?</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd></dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……。」無言地看著出雲，老實說自己也很好奇對方到底在做什麼就是了。<br><br>「沙發扶手旁有充電器。規格不合的話，我房間書桌上也有轉接頭，你先拿去用吧。」輕咳一聲，出聲提醒道，「很急的話，我的手機也可以先借你拿去用？」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「對不起。」沮喪地垂著頭，「手機的充電頭是TYPE-C的。」緩緩站起身，轉過身時額角充滿冷汗。<br><br>「因為學園祭的事情，在校內必須和大家保持聯繫，所以電量只剩下一點點……」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>蘋果人 不愧天盟原</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「昨天晚上向家裡連繫後，好像只剩下2%左右的電量。」痛苦地瞇起眼，看起來要變成酸梅。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>日本的蘋果比較便宜</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>比HTC便宜 但三星我就不知道了...</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>日本的哈根達斯也比較便宜QQ(喔</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>因為他們有自己ㄉ製造場!你有看過相關新聞嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我忘記燈燈</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>嗎ㄉ全形</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd></dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>現在不論是半形全形都可以燈燈了　（應該吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>＆近十年好像各大手機都改成TYPE C了...三星、HTC、蘋果都是</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請問 我們在哪吃飯呀(怎是我問</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>?</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>客廳吧</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>那ㄍ中島如果是開放式</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>應該可以用 當參考就好</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>OK</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「哇，你的LINE待會一定很精彩。」尤其是和佐山的聊天室。<br><br>「先吃飯吧，吃飯要緊。」從沙發旁拔下充電中的行充塞給出雲後，把對方推到沙發上坐好，「要喝什麼，牛奶還是果汁？」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠夭超諷刺好可怕</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>那是期待ㄉ意思 ㄅ能只有自己受害(小櫻：？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「早上想喝味噌湯……」媽的出雲脩喜，你還挑啊。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 (1D2) ＞ 2</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>沒有</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>哭啊</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……即溶的可以嗎？」ㄘㄟˊ 了出雲一眼，過了幾秒後才問道。<br><br>沒有待在原地等待對方回覆，而是回到廚房先盛裝一小碗燉牛肉，和烤好的吐司憶起放在盤子上，端到客廳桌上。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 (1D2) ＞ 1</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「！」像是有狗耳朵一樣，開心的晃晃身體，「可以嗎？」</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>湊到久遠身旁，想看看有沒有能幫忙的，但大部分的事情好像都做完了……</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>怎麼感覺比看到我還開心</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>學長的錯覺吧</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>KP去跳整一下冷氣溫度</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>請跳 注意安全</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「當然可以，要是讓皇帝大人不滿意了，我可是會被佐山教訓一整天呢。」輕聲笑了笑，開玩笑地說道，並把對方推回沙發上，「趁熱吃，別燙到。」<br><br>「對了，有指定的牌子嗎？還是只要是味噌湯就好？」走到玄關準備穿鞋，看來是打算直接出門去買即溶味噌湯。</dd></dl>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>見到久遠的動作，楞神地眨了眨眼，接著立刻站起身，「等、等等，我喝牛奶就好！我想和學長一起吃早餐！」</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>1D2 (1D2) ＞ 1</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「你不是說早上想喝味噌湯？樓下就有超商，很快的。」穿好鞋子打開門，沒有要留下的意思，「你先吃吧，不用等我。」<br><br>「順便趁這段空檔先回個訊息吧，我可不想再收到連環通知了。」離開前不忘提醒道，最後就這樣留下出雲一個人獨自在自己家了。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>＆基本上讓他們聊聊我們或許想知道的事情　然後好好收尾就可以了<br>劇本、家的模樣......大致上含糊帶過都可以，這裡順過之後就可以慢慢玩IF探索者或是我們複製一個房間，看看他們沒有睡覺變成狗or任何想看ㄉ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>好好笑 好啊 看ㄋ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>可以簡單帶過到我回來就好 然後早餐聊ㄍ天？</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>出雲的身體微微顫抖著，卻只是伸出手站在原地。<br>大概是真的變回人類了吧，所以他沒有像半夜那樣緊迫盯人、動不動就黏著久遠。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>垂頭沮喪的出雲脩喜、傳達不了自己愛意的出雲脩喜，默默點開已經充電道15%的手機。<br><br>輸入密碼打開螢幕之後，如同久遠預料，他的手機通知真的很多。而且大部分確實都是佐山櫻的電話和訊息。<br><br>而其中，一條通知，是小金井刃。<br>『皇帝大人～你有找到悠介老大的家嗎～！下次我也要去玩！』</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>這種聊天很容易跟企劃依樣不知道怎ㄇ收尾(幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>腦中有大概ㄉ想法但偶控制不了阿喜(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>「啊，要罵一頓這個傢伙。」單手抓著頭，坐到沙發上，輸入了幾個字。<br><br>表情，看起來有些憤怒與無奈。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc3"><dt>★</dt><dd>感覺收尾在阿喜這裡也可以(帝王回不了家ㄌ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>『你告訴我的學長家的地址，根本是錯的！你這混蛋。』<br><br>出雲傳送訊息給小金井刃後，暫時把手機丟在旁邊。<br><br>嗯，大家知道的，出雲脩喜對於佐山的的掌控是感到壓力且有些抗拒的。窩囊的他大概還會逃避一下吧。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹 校ww死www</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>讓帝王回來 然後啊喜說歡迎回家也可以</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>明明很想玩 但是連續跑團造成的嗎?腦袋的身體異常困倦(幹打ㄉ好像我當KP時ㄉ描述</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我可沒告訴過小ㄐㄐ我家地址啊！(小ㄐㄐ：我去問齊藤ㄉd^O^b</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>wwwww好 那我回家一夏(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>當時好像是說可以問小ㄐㄐ 但確實是說小ㄐㄐ沒有...?</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>那玩但ㄌ我怎ㄇ知道的 是之前調查美先坂ㄉ...對ㄇ...</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我可以改一下訊息(幹</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>可以讓小ㄐㄐ回不用客氣 ㄊㄑ辦公室翻學生資料就有ㄌ？(老師：</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我改了（靠北</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>校ㄌ ㄋ改ㄉ很讚b</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc0"><dt></dt><dd>沒隔多久，久遠就帶著皇帝大人指定要喝的味噌湯回來了，這就是DEX15的速度吧。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>「……。」打開家門後，盯著眼前的景象，一言不發地愣了好一會。<br><br>還亮著燈的客廳、食物的香氣(雖然是自己做的)，以及正等著自己的那個人。<br>有多久沒體會到這樣的感覺了呢，自己也記不太清了，但這種感覺──一定是能讓人不自覺露出笑容的感覺吧。</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd><br>「我回來了，脩喜。」<br></dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>好浪漫．．．</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>幫ㄋ結尾(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>抬起頭，輕輕地笑了出來。<br><br>　「歡迎回家，前輩。」<br>　　　「啊，是悠介學長才對……」<br><br>小小聲地、懊惱地碎碎念。</dd></dl>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>帶著許多疑惑、許多感情，你們一同邁向了溫暖的日常。<br><br>　　　　（後日談-ＥＮＤ…？）</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（開始複製房間（幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>還是要讓他們問問題　我不太確定</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>請KP骰完KISS能力再睡(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>停在這裡阿喜就沒機會問親親ㄉ事ㄌ 滿好ㄉ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc1"><dt>KP</dt><dd>能力檢測：<br><br>1.親吻技巧(唇碰唇、啃咬、舔拭等)<br>2.接吻力道(平均值)<br>3.接吻技術(讓人感覺到的舒適程度)<br><br>請擲骰1D100作為初次接吻的技術值參考。</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>他想問ㄉ是.....房間裡ㄉ小娃娃</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>太詳細ㄌwwwww</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>後面才會響起親親</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>是不是可以這樣骰 我看看</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>1D100 A<br><br>1D100 B<br><br>1D100 C (1D100) ＞ 69</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>...</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>wwwww</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>應該是3D100？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>脩喜要……骰兩次……(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>..</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>1D100 親吻技巧(唇碰唇、啃咬、舔拭等) (1D100) ＞ 13</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>爛死</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>啊 應該是3B100？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>校ㄌ</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>1D100 接吻力道(平均值) (1D100) ＞ 6</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>這傢伙在幹嘛</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>這是第一次ㄉㄇ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>難怪要為什麼ㄌ(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>對吧...但平均力道...</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>1D100 接吻技術(讓人感覺到的舒適程度) (1D100) ＞ 61</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>哀 (抓頭)</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>出雲ㄉ親親小女生應該會很喜歡</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>可以不骰嗎 好怕丟臉(幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>但肉食ㄉ人會想說靠北</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>小櫻……(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D100 初次接吻技巧(唇碰唇、啃咬、舔拭等) (1D100) ＞ 44</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我是覺ㄉ這都可以練習所以</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>???</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D100 初次接吻力道(平均值) (1D100) ＞ 100</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>1D100 初次接吻技術(讓人感覺到的舒適程度) (1D100) ＞ 34</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>靠北啊</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>ㄅ歉(</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>超大力wwwwwwwwwww</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>3B100 第二次接吻的數值(帶有侵略性的那個) (3B100) ＞ 3,27,97</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>?</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>？</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>但1D6=1(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>對啊 所以帝王喜歡用力ㄉ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>還是說這是自己舒服ㄉ程度</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>27哪來ㄉ力<br>幹阿wwwwwwwwwww</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>感覺很有道理</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>100要平均100 你是真ㄉ一值都100吧</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>喜歡嗎(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>要讓人害羞是不是要描述唾液</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>...?</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>嘖嘖水聲</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>喜歡 1D100</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我骰錯ㄌ(幹太慌張ㄌ</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>哇嘎哩媽喜搭</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>2B100 初次被吻的感受(舒適度/喜歡程度) (2B100) ＞ 36,92</dd></dl>
+	<dl class="tc2 nc2"><dt>久遠 悠介</dt><dd>2B100 第二次被吻的感受(舒適度/喜歡程度) (2B100) ＞ 39,68</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>難怪1D6=1ㄌ(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>你喜阿喜</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你只是喜歡阿喜</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>喜歡輕輕ㄉ(</dd></dl>
+	<p class="tc2 tab"><span>main</span></p>
+	<dl class="tc2 nc4"><dt>出雲 脩喜</dt><dd>2B100 初次被吻的感受(舒適度/喜歡程度) (2B100) ＞ 31,55</dd></dl>
+	<p class="tc0 tab"><span>other</span></p>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>哀</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>太痛ㄌ 學長</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>我沒咬你耶</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑 ㄊ們真ㄉ很處男(</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KP請休(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>那你喜歡被咬的感覺嗎？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>對了學長</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>讓我看看你的脖子......？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>咬咬用力程度　1D100</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>oO(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我又忘記 我真的是 這個類型的就會緊張到失意?</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>1D100 咬咬用力程度 (1D100) ＞ 37</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>ㄋ好柔弱(各方面</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>會有感覺但不一定會有痕跡的感覺......？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>心靈也很弱。</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>那就好 不然我就這樣出門ㄌ</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>學長，你知道親太久嘴唇會腫起來嗎？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我也是聽說的。</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>我發現喝味噌湯的時候嘴巴痛痛的！怎麼回事呢。</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>再吵就不要喝</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>我要變成跟某些人一樣，在閒聊比較會ＲＰ的人了</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>笑死 閒聊可以亂打(</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>（安靜喝喝湯）那學長、不會痛嗎？或是其他的……</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>癢癢的之類的。</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>癢癢的？</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>噢，那就好。</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>沒有 我讓ㄋ去休息(對</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>原來如此</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>ㄋ有空時可以再自導自演給我看(？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>蝦！！！醫生要被死掉喔！！（幹</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>你知道我最不會自演了！！演不下去！！！</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>醫生不會去吧(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（哭......)</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>https://x.com/4823trpg/status/1931245490395296183</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>麻煩的傢伙一個就夠了，再多就不奉陪了。</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>這感覺在line討論比較容易和方便</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>啊!!!!</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>看ㄌ好想打架<br>真ㄉ打架ㄉ時候：好痛苦不打ㄌ</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「等一下。」歪歪頭，帶著稍許邪氣的笑容說道：「我有聽過你們上頭說的話喔。」</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「……你不介意我對凱薩說的話，你就離開吧？」</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「什麼啊。」看了一下醫生。</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>他們說了啥(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>大概是亂講的吧　說什麼醫生很喜歡凱薩　要好好保護他ㄛ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>（為何是保護有戰力ㄉ？</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>對啊 怎麼不是保護醫生wwwwwwwwwww</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>「如果凱薩連小鬼的胡言亂語都會信的話，那就隨便他吧。」明明也才沒差幾歲。</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>像白鬼招了招手，「管他要不要離開，跟我說？」往旁邊彎下身子，並對醫生比了中指。<br><br>（因為小白真的很矮。）</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>小白幾歲啊 只記得22以上……？</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「說什麼呢，小鬼什麼的……？」微微瞇起眼，「你們男人都喜歡年輕的吧？這不是剛好嗎？」</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>我的年紀HO設裡面，沒問題嗎？</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>偶也ㄅ知道 很嚴重ㄉ那種ㄇ(？</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>不然比醫生大還小就好？</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>(腦中ㄉ醫生要講好靠北ㄉ話ㄌ 好怕ㄊ被小白幹掉</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ㄅ會啦　在這裡被幹掉也沒關係（幹</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>（離席）</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「喂，話還沒說完。」彎下腰聽小白說話。</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「噢，托馬斯先生說，拜恩那傢伙喜歡你。」雙手一攤，「但看他不在乎，應該也不是什麼大不了的事情？或是說這是假的？隨便。」</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「……」老闆會直接告訴別人醫生的名字嗎？總覺得怪怪的。</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「說到這個，你們有肉體關係嗎？」</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「咳。」</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>oO(對耶 小白是腐女</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「幹嘛？你會介意這個嗎？」捲起凱薩的一縷橘髮。</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「他跟老闆還比較可能有一腿……」</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>wwwwwwwwww</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑 醫生跟小白一定關係很差(</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「真的？還是你們３Ｐ？」</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>站直身體，遠離白鬼。</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「喂！狗還沒打完！喂～！」</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>聳聳肩，「只有同性戀開不起玩笑吧。」</dd></dl>
+	<dl class="tc0 nc13"><dt>白鬼</dt><dd>「因為說一說發現是真的，會很尷尬啊。」去處理自己的工作。</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>小白‧雷包腐女代表。</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>廁所．．．</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>好好笑 醫生本來要回說難怪ㄋ交ㄅ到男朋友(幹被殺死</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>回啊幹！！</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>「呵呵^^」已經離得遠遠的了。</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「小女生很可怕。」緩緩走到醫生旁邊。</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>oO(ㄋ也小女生</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「怎麼，你真的對我有意思？所以送我巧克力還來找我？」</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>oO(那不是奧布里送的巧克力嗎</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>ＫＰ的腦子出了差錯，葛和我一起變笨</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>想要醫生送巧克力就直接說嘛(</dd></dl>
+	<dl class="tc0 nc12"><dt>凱薩</dt><dd>「那我要酒心的？」</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>嗎的我家有誰會聽人說話再做事情</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>哇</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>沒有印象欸！</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>一時間竟然回答不出來 穗高8(ㄅ算</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>先停在這裡輸出全部好ㄌ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>如果有神ㄇ很特別ㄉ閒聊我再輸出一次</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>KK 辛苦ㄌ～</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>(在整理親親</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>？？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>隨便聊都可以（我ㄉ腦子為何是糨糊）</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>為什麼呢……和學長獨處的空間都會被打擾……</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>有愛反而比較累？明明比較短？</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>因為PL想看(</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>笑死 ㄋ之前太累ㄌㄅ(</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>明明有新增　卻沒用上的我</dd></dl>
+	<dl class="tc0 nc0"><dt></dt><dd>下去吧你！</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>其實偶中途有想用小ㄐㄐ講話 但ㄇ有角色(</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>我應該交給老大的ＰＬ的　嗚嗚！</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>你放出來一下？(幹阿</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>不記得ＤＥＸ</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>好好唷！！櫻同學對老大好～熱情！我也想要被櫻同學連環摳！！！</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(轉眼間只剩下自己 緊張ㄉ不知所措)</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(躲在後面((幹</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>......</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>(真心無言)</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>櫻同學被我帥到說不出話了嗎！！真可愛！！！</dd></dl>
+	<dl class="tc0 nc4"><dt>出雲 脩喜</dt><dd>學長......我這個晚上告白了那麼多次......(講自己的)</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>從醫生到小ㄐㄐ 智商突然急降(</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>這......如果小金井同學是在說外貌的話，我認為出雲大、咳嗯，會長大人才是櫻喜歡的類型。</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>刃吹雲大</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>唉唷</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>請當作沒看見吧。</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>久遠同學，你沒有追星過嗎？</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>櫻同學連選字都是我的名字的形狀了嗎……這是真愛啊！！！</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>……</dd></dl>
+	<dl class="tc0 nc15"><dt>佐山 櫻</dt><dd>……久遠同學……</dd></dl>
+	<dl class="tc0 nc2"><dt>久遠 悠介</dt><dd>(把小ㄐㄐ推走</dd></dl>
+	<dl class="tc0 nc8"><dt>小金井 刃</dt><dd>(被流放)</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>滿喜歡小白和醫生＋葛ㄉ互動ㄉ</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>謝大人</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>出來說不客氣ㄉ可能是奧(</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>幹 好有可能好好笑</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>体 體力真ㄉ不行 先躺 在其他app上聊天吧</dd></dl>
+	<dl class="tc0 nc3"><dt>★</dt><dd>豪wwww好好休息！辛苦ㄌ 感恩～</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>這裡才是(鞠躬</dd></dl>
+	<dl class="tc0 nc1"><dt>KP</dt><dd>(開始思考下面這ㄍ要輸出嗎 然後就輸出ㄌ</dd></dl>
+
+</section>
+</main>
+<footer><a href="https://box.tetronomo.com/ccfc/" target="_blank">CCFOLIAログコンバータ Ver1.25</a></footer>
+<script type="text/javascript">
+const tab = [];
+const name = [];
+const trigger = document.querySelectorAll(".select_t");
+trigger.forEach(function(target) {
+	target.addEventListener('change', function() {
+		const classname = target.id;
+		const id = classname.split("tc");
+		tab[id[1]] = target.checked ? '' : 'none';
+		const tid = tab[id[1]];
+		const arr = document.querySelectorAll("." + classname);
+		arr.forEach(function(value) {
+			const string = value.className;
+			let temp = "";
+			let nid = "";
+			if(string.match('nc')) {
+				temp = string.split("nc");
+				nid = temp[1].substring(0,1);
+			}
+			if(tid == 'none') {
+				value.style.display = 'none';
+			} else {
+				if(name[nid] == 'none') {
+					value.style.display = 'none';
+				} else {
+					value.style.display = '';
+				}
+			}
+		});
+	});
+});
+const triggern = document.querySelectorAll(".select_n");
+triggern.forEach(function(target) {
+	target.addEventListener('change', function() {
+		const classname = target.id;
+		const id = classname.split("nc");
+		name[id[1]] = target.checked ? '' : 'none';
+		const nid = name[id[1]];
+		const arr = document.querySelectorAll("." + classname);
+		arr.forEach(function(value) {
+			const string = value.className;
+			const temp = string.split("tc");
+			const tid = temp[1].substring(0,1);
+			if(tab[tid] == 'none') {
+				value.style.display = 'none';
+			} else {
+				if(nid == 'none') {
+					value.style.display = 'none';
+				} else {
+					value.style.display = '';
+				}
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>
