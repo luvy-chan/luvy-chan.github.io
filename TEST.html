@@ -50,8 +50,8 @@ function transformText(text) {
   text = text.replace(/@#%@#%/g, "");
   text = text.replace(/@#%/g, "*");
 
-  // 6. 刪掉尾段落多出的 * 
-  text = text.replace(/」\*/g, "」");
+  // 6. // 移除段落結尾多餘的星號
+  text = text.replace(/」\*(\n|$)/g, "」$1");
 
   return text;
 }
