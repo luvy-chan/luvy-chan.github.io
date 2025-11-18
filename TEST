@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>巨集文字轉換模擬器</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  textarea { width: 100%; height: 200px; margin-bottom: 10px; }
+  button { padding: 10px 20px; font-size: 16px; margin-right: 10px; margin-top: 5px;}
+  #output { white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; margin-top: 10px; min-height: 200px; }
+</style>
+</head>
+<body>
+
+<h2>巨集文字轉換模擬器</h2>
+
+<label>上傳文字檔 (.txt)：</label>
+<input type="file" id="fileInput" accept=".txt">
+<br><br>
+
+<label>或直接貼入文字：</label>
+<textarea id="inputText"></textarea>
+<br>
+
+<button onclick="runTransform()">執行轉換</button>
+<button onclick="downloadText()">下載結果 (.txt)</button>
+
+<h3>轉換結果：</h3>
+<div id="output"></div>
+
+<script>
+let latestOutput = "";
+
+// 巨集邏輯模擬
+function transformText(text) {
+  // 1. 段落開頭加暫時標記
+  text = text.replace(/(^|\n)/g, "$1@#%");
+
+  // 2. 段落結尾加暫時標記
+  text = text.replace(/(\n|$)/g, "@#%$1");
+
+  // 3. 對話段落「…」加尾部暫時標記
+  text = text.replace(/@#%「([^」]+)」/g, "@#%「$1」@#%");
+  text = text.replace(/「([^」]+)」@#%/g, "@#%「$1」@#%");
+
+  // 4. 段落內對話加 * 
+  text = text.replace(/：「([^」]+)」/g, "：*「$1」*");
+
+  // 5. 刪掉多餘暫時標記
+  text = text.replace(/@#%@#%/g, "");
+  text = text.replace(/@#%/g, "*");
+
+  return text;
+}
+
+// 執行轉換
+function runTransform() {
+  let input = document.getElementById('inputText').value;
+  if (!input) {
+    alert("請先貼文字或上傳檔案！");
+    return;
+  }
+  let output = transformText(input);
+  document.getElementById('output').textContent = output;
+  latestOutput = output;
+}
+
+// 下載結果
+function downloadText() {
+  if (!latestOutput) {
+    alert("請先執行轉換！");
+    return;
+  }
+  const blob = new Blob([latestOutput], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "轉換結果.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 檔案上傳事件
+document.getElementById('fileInput').addEventListener('change', function(event){
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    document.getElementById('inputText').value = e.target.result;
+  };
+  reader.readAsText(file, "UTF-8");
+});
+</script>
+
+</body>
+</html>
