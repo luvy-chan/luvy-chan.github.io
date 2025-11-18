@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>巨集文字轉換模擬器</title>
+<title>轉換斜體格式</title>
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; }
   textarea { width: 100%; height: 200px; margin-bottom: 10px; }
@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<h2>巨集文字轉換模擬器</h2>
+<h2>轉換斜體格式</h2>
 
 <label>上傳文字檔 (.txt)：</label>
 <input type="file" id="fileInput" accept=".txt">
@@ -49,6 +49,9 @@ function transformText(text) {
   // 5. 刪掉多餘暫時標記
   text = text.replace(/@#%@#%/g, "");
   text = text.replace(/@#%/g, "*");
+
+  // 6. 刪掉尾段落多出的 * 
+  text = text.replace(/」\*/g, "」");
 
   return text;
 }
