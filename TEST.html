@@ -94,8 +94,9 @@ document.getElementById('fileInput').addEventListener('change', function(event){
   
   const reader = new FileReader();
   reader.onload = function(e) {
-    document.getElementById('inputText').value = e.target.result;
-  };
+   inputArea.value = e.target.result; // 放入 textarea
+   runTransform(); // ✅ 立即轉換
+};
   reader.readAsText(file, "UTF-8");
 });
 
