@@ -32,12 +32,6 @@
 
 <script>
 let latestOutput = "";
-
-// 取得 textarea 元素
-const inputArea = document.getElementById("inputText");
-
-// 當輸入框內容變化時自動轉換
-inputArea.addEventListener("input", runTransform);
   
 // 巨集邏輯模擬
 function transformText(text) {
@@ -133,6 +127,13 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
         alert("⚠️ 複製失敗，請手動選取");
     }
 });
+
+// 取得 textarea 元素
+const inputArea = document.getElementById("inputText");
+
+// 當輸入框內容變化時自動轉換
+inputArea.addEventListener("input", runTransform);
+  
 </script>
 
 </body>
