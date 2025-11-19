@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>轉換斜體格式</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f9f9f9; }
+  h2 { text-align: center; color: #333; }
+  textarea { width: 100%; height: 200px; margin-bottom: 10px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+  button { padding: 10px 20px; font-size: 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+  button:hover { opacity: 0.8; }
+  #pasteBtn { background-color: #4CAF50; color: white; }
+  #copyBtn { background-color: #2196F3; color: white; }
+  #downloadBtn { background-color: #FF9800; color: white; }
+  #output { white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; margin-top: 10px; min-height: 200px; border-radius: 5px; background-color: #fff; }
+  label { font-weight: bold; color: #555; }
+  @media (max-width: 600px) {
+    button { width: 100%; margin-top: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<h2>轉換斜體格式</h2>
+
+<label>上傳文字檔 (.txt)：</label>
+<input type="file" id="fileInput" accept=".txt">
+<br><br>
+
+<label>或直接貼入文字：</label>
+<textarea id="inputText" placeholder="在這裡貼上或輸入文字…"></textarea>
+<br>
+
+<button id="pasteBtn">📋 貼上</button>
+<button id="copyBtn">✂️ 複製結果</button>
+<button id="downloadBtn">⬇️ 下載 (.txt)</button>
+<h3>轉換結果：</h3>
+<div id="output"></div>
+
+<script>
+let latestOutput = "";
+
+// 巨集邏輯模擬
+function transformText(text) {
+  text = text.replace(/(^|\n)/g, "$1@#%");
+  text = text.replace(/(\n|$)/g, "@#%$1");
+  text = text.replace(/@#%「([^」]+)」/g, "@#%「$1」@#%");
+  text = text.replace(/「([^」]+)」@#%/g, "@#%「$1」@#%");
+  text = text.replace(/：「([^」]+)」/g, "：*「$1」*");
+  text = text.replace(/@#%@#%/g, "");
+  text = text.replace(/@#%/g, "*");
+  text = text.replace(/」\*(\n|$)/g, "」$1");
+  return text;
+}
+
+// 執行轉換
+function runTransform() {
+  let input = inputArea.value;
+  if (!input) return;
+  let output = transformText(input);
+  outputArea.textContent = output;
+  latestOutput = output;
+}
+
+// 下載結果
+function downloadText() {
+  if (!latestOutput) return alert("請先輸入或貼上文字！");
+  const blob = new Blob([latestOutput], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "轉換結果.txt";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 元素
+const inputArea = document.getElementById("inputText");
+const outputArea = document.getElementById("output");
+
+// 一鍵貼上
+document.getElementById("pasteBtn").addEventListener("click", async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    inputArea.value = text;
+    runTransform();
+  } catch {
+    alert("⚠️ 無法讀取剪貼簿內容，請確認已授權");
+  }
+});
+
+// 一鍵複製
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(outputArea.innerText);
+    const btn = document.getElementById("copyBtn");
+    btn.innerText = "已複製！";
+    setTimeout(() => btn.innerText = "✂️ 複製結果", 1200);
+  } catch {
+    alert("⚠️ 複製失敗，請手動選取");
+  }
+});
+
+// 下載
+document.getElementById("downloadBtn").addEventListener("click", downloadText);
+
+// 檔案上傳
+document.getElementById('fileInput').addEventListener('change', function(event){
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    inputArea.value = e.target.result;
+    runTransform();
+  };
+  reader.readAsText(file, "UTF-8");
+});
+
+// 直接輸入即時轉換
+inputArea.addEventListener("input", runTransform);
+</script>
+
+</body>
+</html>
