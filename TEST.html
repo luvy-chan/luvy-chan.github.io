@@ -23,7 +23,6 @@
 <br>
 
 <button id="pasteBtn">貼上</button>
-// <button onclick="runTransform()">轉換</button>
 <button id="copyBtn">複製</button>
 <h3>轉換：</h3>
 <div id="output"></div>
@@ -33,6 +32,12 @@
 <script>
 let latestOutput = "";
 
+// 取得 textarea 元素
+const inputArea = document.getElementById("inputText");
+
+// 當輸入框內容變化時自動轉換
+inputArea.addEventListener("input", runTransform);
+  
 // 巨集邏輯模擬
 function transformText(text) {
   // 1. 段落開頭加暫時標記
