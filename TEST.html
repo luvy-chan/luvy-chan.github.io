@@ -94,9 +94,22 @@ document.getElementById('fileInput').addEventListener('change', function(event){
   
   const reader = new FileReader();
   reader.onload = function(e) {
-    document.getElementById('inputText').value = e.target.result;
+    
+    // 嘗試 UTF-8 解析
+let decoder = new TextDecoder("utf-8", { fatal: false });
+let text = decoder.decode(e.target.result);
+
+// 檢查是否為亂碼（UTF-8 失敗常出現 �）
+if (text.includes("�")) {
+    // 換用 Big5（Windows-950/ANSI）
+    let big5decoder = new TextDecoder("big5", { fatal: false });
+    text = big5decoder.decode(e.target.result);
+}
+
+document.getElementById('inputText').value = text;
+
   };
-  reader.readAsText(file, "UTF-8");
+  reader.readAsArrayBuffer(file);
 });
 
 // === 一鍵貼上 ===
