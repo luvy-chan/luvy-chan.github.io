@@ -27,16 +27,23 @@
 <input type="file" id="fileInput" accept=".txt">
 <br><br>
 
-<label>或直接貼入文字：</label>
+<label>直接貼入文字：</label>
 <textarea id="inputText" placeholder="在這裡貼上或輸入文字…"></textarea>
 <br>
 
-<button id="pasteBtn">📋 貼上</button>
-<button id="copyBtn">✂️ 複製結果</button>
+<div style="text-align: center; margin-top: 10px;">
+  <button id="pasteBtn">📋 貼上</button>
+  <button id="copyBtn">✂️ 複製</button>
+</div>
+  
 <h3>轉換結果：</h3>
 <div id="output"></div>
-<button id="downloadBtn">⬇️ 下載TXT檔 (.txt)</button>
-
+<br>
+<div style="text-align: center; margin-top: 10px;">
+  <button onclick="runTransform()">轉換</button>
+  <button id="downloadBtn">⬇️ 下載 (.txt)</button>
+</div>
+  
 <script>
 let latestOutput = "";
 
@@ -124,4 +131,5 @@ inputArea.addEventListener("input", runTransform);
 
 </body>
 </html>
+
 
