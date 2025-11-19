@@ -23,7 +23,7 @@
 <br>
 
 <button id="pasteBtn">貼上</button>
-<button onclick="runTransform()">轉換</button>
+// <button onclick="runTransform()">轉換</button>
 <button id="copyBtn">複製</button>
 <h3>轉換：</h3>
 <div id="output"></div>
@@ -107,6 +107,9 @@ document.getElementById("pasteBtn").addEventListener("click", async () => {
     try {
         const text = await navigator.clipboard.readText();
         inputArea.value = text;
+
+        // 直接執行轉換
+        runTransform();
     } catch (err) {
         alert("⚠️ 無法讀取剪貼簿內容，請確認已授權");
     }
