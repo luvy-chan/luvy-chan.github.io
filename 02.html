@@ -81,6 +81,8 @@
 
             const convertPunctuation = (text) => {
                 let result = text;
+                result = result.replace(/<br\s*\/?>/gi, '\n');
+                
                 const punctMap = {
                     ',': '，', '.': '。', '?': '？', '!': '！', ':': '：', ';': '；',
                     '(': '（', ')': '）', '[': '【', ']': '】', '{': '｛', '}': '｝',
@@ -109,11 +111,7 @@
             };
 
             const handleInputChange = (e) => {
-                let text = e.target.value;
-                
-                // 🔵 自動把 <br> 轉成換行
-                text = text.replace(/<br\s*\/?>/gi, '\n');
-                
+                const text = e.target.value;
                 setInputText(text);
                 handleConvert(text);
             };
@@ -141,11 +139,7 @@
 
             const handlePaste = async () => {
                 try {
-                let text = await navigator.clipboard.readText();
-                    
-                    // 🔵 這裡也自動把 <br> 轉換成換行
-                    text = text.replace(/<br\s*\/?>/gi, '\n');
-                    
+                const text = await navigator.clipboard.readText();
                     setInputText(text);
                     handleConvert(text);
                 } catch (err) {
@@ -191,14 +185,6 @@
         </label>
 
         <div className="flex items-center gap-2">
-            {/* 永遠顯示 */}
-            <button
-                onClick={handlePaste}
-                className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
-            >
-                貼上
-            </button>
-
             {/* 有內容才顯示 */}
             {inputText && (
                 <button
@@ -242,7 +228,7 @@
                                     >
                                         {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
                                     </button>
-                                </div>                                
+                                </div>
                                 <textarea
                                     readOnly
                                     className="p-4 h-80 md:h-96 resize-none outline-none bg-slate-50/50 
@@ -250,9 +236,7 @@
                                                whitespace-pre-wrap overflow-auto"   // 🔵 能完整顯示格式
                                     placeholder="轉換後的結果會顯示在這裡..."
                                     value={outputText}
-                                />
-
-                                
+                                />                                
                                 {outputText && (
                                     <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
                                         {isCopied ? <IconCheck className="w-6 h-6" /> : <IconCopy className="w-6 h-6" />}
