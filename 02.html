@@ -98,8 +98,6 @@
                     return punctMap[match] || match;
                 });
 
-                result = result.replace(/"/g, '”');
-                result = result.replace(/'/g, '’');
                 return result;
             };
 
@@ -233,7 +231,7 @@
                                 </div>
                                 <textarea
                                     readOnly
-                                    className="p-4 w-full h-[500px] md:h-[650px] resize-none outline-none 
+                                    className="p-4 w-full h-[1200px] md:h-[1000px] resize-none outline-none 
                                                bg-slate-50/50 text-base md:text-lg leading-relaxed 
                                                text-slate-800 cursor-text whitespace-pre-wrap overflow-auto"
                                     placeholder="轉換後的結果會顯示在這裡..."
