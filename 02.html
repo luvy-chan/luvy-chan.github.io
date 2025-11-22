@@ -175,7 +175,7 @@
                         </div>
 
                         {/* 主介面 */}
-                        <div className="grid grid-rows-[1fr_auto_1fr] gap-4 h-[80vh] md:h-[70vh]">
+                        <div className="grid grid-rows-[auto auto 1fr] gap-4">
                             
                             {/* 上方輸入 */}
 <div className="flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -229,12 +229,12 @@
                                         {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
                                     </button>
                                 </div>
-                                <div className="p-4 w-full resize-none outline-none 
+                                <div className="p-4 w-full 
                                                 bg-slate-50/50 text-base md:text-lg leading-relaxed 
-                                                text-slate-800 cursor-text whitespace-pre-wrap overflow-auto max-h-[500vh]">
+                                                text-slate-800 cursor-text whitespace-pre-wrap overflow-auto">
                                       {outputText}
                                 </div>
-                               
+                                                              
                                 {outputText && (
                                     <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
                                         {isCopied ? <IconCheck className="w-6 h-6" /> : <IconCopy className="w-6 h-6" />}
