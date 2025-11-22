@@ -89,7 +89,9 @@
                     '<': '《', '>': '》', '/': '／', '\\': '＼', '|': '｜',
                     '@': '＠', '#': '＃', '$': '＄', '%': '％', '^': '︿', '&': '＆',
                     // '*': '＊', // 保留半形
-                    '_': '＿', '+': '＋', '-': '－', '=': '＝', '~': '～', '`': '‵'
+                    '_': '＿', '+': '＋', '-': '－', '=': '＝', '~': '～', '`': '‵',
+                    '“': '「',   // 新增：左引號
+                    '”': '」'    // 新增：右引號
                 };
 
                 result = result.replace(/[,.? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`]/g, (match) => {
@@ -231,12 +233,13 @@
                                 </div>
                                 <textarea
                                     readOnly
-                                    className="p-4 h-80 md:h-96 resize-none outline-none bg-slate-50/50 
-                                               text-base md:text-lg leading-relaxed text-slate-800 cursor-text
-                                               whitespace-pre-wrap overflow-auto"   // 🔵 能完整顯示格式
+                                    className="p-4 w-full h-[500px] md:h-[650px] resize-none outline-none 
+                                               bg-slate-50/50 text-base md:text-lg leading-relaxed 
+                                               text-slate-800 cursor-text whitespace-pre-wrap overflow-auto"
                                     placeholder="轉換後的結果會顯示在這裡..."
                                     value={outputText}
-                                />                                
+                                />
+                               
                                 {outputText && (
                                     <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
                                         {isCopied ? <IconCheck className="w-6 h-6" /> : <IconCopy className="w-6 h-6" />}
