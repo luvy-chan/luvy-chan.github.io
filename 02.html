@@ -234,14 +234,15 @@
         {outputText}
     </div>
 
-    {outputText && (
-        <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="mt-2 self-end px-3 py-1 rounded-md bg-blue-600 text-white text-sm hover:bg-blue-700 transition"
-        >
-            ⬆ 回到頂部
-        </button>
-    )}
+    {/* 回到頂部全局按鈕 */}
+{outputText && (
+  <button
+    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+    className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
+  >
+    ⬆ 回到頂部
+  </button>
+)}
 
     {outputText && (
         <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
