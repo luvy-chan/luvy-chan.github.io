@@ -176,18 +176,32 @@
                         <div className="grid grid-rows-[1fr_auto_1fr] gap-4 h-[80vh] md:h-[70vh]">
                             
                             {/* 上方輸入 */}
-                            <div className="relative flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 transition-all duration-200">
-                                <div className="flex justify-between items-center px-4 py-2 bg-slate-100 border-b border-slate-200">
-                                    <label className="text-sm font-semibold text-slate-600">輸入文字 (簡/繁/半形標點)</label>
-                                    {inputText && (
-                                        <button
-                                          onClick={handlePaste}
-                                          className="text-xs ml-3 px-2 py-1 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
-                                      >
-                                          貼上
-                                      </button>
-                                    )}
-                                </div>
+                            <div className="flex justify-between items-center px-4 py-2 bg-slate-100 border-b border-slate-200">
+    <label className="text-sm font-semibold text-slate-600">
+        輸入文字 (簡/繁/半形標點)
+    </label>
+
+    <div className="flex items-center gap-2">
+        {/* 這顆永遠出現 */}
+        <button
+            onClick={handlePaste}
+            className="text-xs px-2 py-1 rounded-md bg-blue-100 text-blue-700 hover:bg-blue-200 transition"
+        >
+            貼上
+        </button>
+
+        {/* 這顆仍然維持有內容時才出現 */}
+        {inputText && (
+            <button
+                onClick={handleClear}
+                className="text-xs flex items-center text-slate-400 hover:text-red-500 transition-colors"
+            >
+                <IconTrash2 /> 清空
+            </button>
+        )}
+    </div>
+</div>
+
                                 <textarea
                                     className="flex-1 p-4 resize-none outline-none text-base md:text-lg leading-relaxed"
                                     placeholder="請在此貼上文字，系統會自動處理..."
