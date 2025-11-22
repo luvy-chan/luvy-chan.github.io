@@ -134,6 +134,18 @@
                 }
             };
 
+
+            const handlePaste = async () => {
+                try {
+                const text = await navigator.clipboard.readText();
+                    setInputText(text);
+                    handleConvert(text);
+                } catch (err) {
+                    alert("無法讀取剪貼簿，請確認瀏覽器權限！");
+                }
+            };
+
+            
             const handleClear = () => {
                 setInputText('');
                 setOutputText('');
