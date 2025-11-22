@@ -94,7 +94,7 @@
                     '”': '」'    // 新增：右引號
                 };
 
-                result = result.replace(/[,.? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`]/g, (match) => {
+                result = result.replace(/[,.? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`“”]/g, (match) => {
                     return punctMap[match] || match;
                 });
 
@@ -229,14 +229,11 @@
                                         {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
                                     </button>
                                 </div>
-                                <textarea
-                                    readOnly
-                                    className="p-4 w-full h-[1200px] md:h-[1000px] resize-none outline-none 
-                                               bg-slate-50/50 text-base md:text-lg leading-relaxed 
-                                               text-slate-800 cursor-text whitespace-pre-wrap overflow-auto"
-                                    placeholder="轉換後的結果會顯示在這裡..."
-                                    value={outputText}
-                                />
+                                <div className="p-4 w-full resize-none outline-none 
+                                                bg-slate-50/50 text-base md:text-lg leading-relaxed 
+                                                text-slate-800 cursor-text whitespace-pre-wrap overflow-auto max-h-[80vh]">
+                                      {outputText}
+                                </div>
                                
                                 {outputText && (
                                     <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
