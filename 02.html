@@ -109,7 +109,7 @@
             };
 
             const handleInputChange = (e) => {
-                const text = e.target.value;
+                let text = e.target.value;
                 
                 // 🔵 自動把 <br> 轉成換行
                 text = text.replace(/<br\s*\/?>/gi, '\n');
@@ -141,7 +141,7 @@
 
             const handlePaste = async () => {
                 try {
-                const text = await navigator.clipboard.readText();
+                let text = await navigator.clipboard.readText();
                     
                     // 🔵 這裡也自動把 <br> 轉換成換行
                     text = text.replace(/<br\s*\/?>/gi, '\n');
@@ -242,13 +242,7 @@
                                     >
                                         {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
                                     </button>
-                                </div>
-                                <textarea
-                                    readOnly
-                                    className="flex-1 p-4 resize-none outline-none bg-slate-50/50 text-base md:text-lg leading-relaxed text-slate-800 cursor-text"
-                                    placeholder="轉換後的結果會顯示在這裡..."
-                                    value={outputText}
-                                />
+                                </div>                                
                                 <textarea
                                     readOnly
                                     className="p-4 h-80 md:h-96 resize-none outline-none bg-slate-50/50 
