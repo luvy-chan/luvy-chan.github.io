@@ -155,7 +155,20 @@
 
             return (
                 <div className="min-h-screen p-4 md:p-8 font-sans text-slate-800 overflow-auto">
-                    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-3xl mx-auto space-y-6">
+        {/* 這裡是標題 + 輸入 + 輸出 ... */}
+    </div>
+
+    {/* 回到頂部按鈕放在最外層 */}
+    {outputText && (
+        <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
+        >
+            ⬆ 回到頂部
+        </button>
+    )}
+</div>
                         
                         {/* 標題區 */}
                         <div className="text-center space-y-2">
