@@ -150,27 +150,54 @@ function App() {
                     </p>
                 </div>
 
-                {/* 網址輸入 + 抓正文 */}
-                <div className="flex mb-2 gap-2">
-                    <input
-                        type="text"
-                        placeholder="貼上 JJWXC 章節網址..."
-                        value={urlInput}
-                        onChange={e => setUrlInput(e.target.value)}
-                        className="flex-1 p-2 border rounded-md"
-                    />
-                    <button
-                        onClick={async () => {
-                            if (!urlInput) return;
-                            const text = await fetchJJWXCContent(urlInput);
-                            setInputText(text);
-                            handleConvert(text);
-                        }}
-                        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-                    >
-                        抓正文
-                    </button>
-                </div>
+               <!-- 網址輸入 + 抓正文 -->
+<div className="flex mb-2 gap-2">
+    <input
+        type="text"
+        placeholder="貼上 JJWXC 章節網址..."
+        value={urlInput}
+        onChange={e => setUrlInput(e.target.value)}
+        className="flex-1 p-2 border rounded-md"
+    />
+    <button
+        onClick={async () => {
+            if (!urlInput) return;
+            try {
+                const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(urlInput);
+                const res = await fetch(proxyUrl);
+                const buffer = await res.arrayBuffer();
+                const html = new TextDecoder('gbk').decode(buffer);
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+
+                const startDiv = doc.querySelector('div[style="clear:both;"]');
+                const endDiv = doc.querySelector('div[align="right"]');
+                if (!startDiv || !endDiv) return;
+
+                let content = '';
+                let node = startDiv.nextSibling;
+                while (node && node !== endDiv) {
+                    if (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE) {
+                        content += node.textContent + '\n';
+                    }
+                    node = node.nextSibling;
+                }
+                const textContent = content.trim();
+
+                setInputText(textContent);
+                handleConvert(textContent);
+
+            } catch (err) {
+                alert("抓取失敗：" + err);
+            }
+        }}
+        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+    >
+        抓正文
+    </button>
+</div>
+
 
                 {/* 上方輸入區 */}
                 <div className="flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
