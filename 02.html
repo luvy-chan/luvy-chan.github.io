@@ -153,90 +153,115 @@
                 setOutputText('');
             };
 
-            return (
-                <div className="min-h-screen p-4 md:p-8 font-sans text-slate-800 overflow-auto">
-  <div className="max-w-3xl mx-auto space-y-6">
-    {/* 標題區 + 輸入 + 輸出 */}
-    <div className="text-center space-y-2">
-      <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
-        <IconType /> 繁簡與標點全自動轉換器
-      </h1>
-      <p className="text-slate-500 text-sm md:text-base">
-        自動將「簡體轉繁體」並將「半形標點轉為全形」。
-        {!converterReady && (
-          <span className="inline-flex items-center ml-2 text-amber-600 text-xs">
-            <IconRefreshCw className="w-3 h-3 mr-1 spin" /> 轉換核心載入中...
-          </span>
-        )}
-      </p>
-    </div>
+ return (
+  <>
+    <div className="min-h-screen p-4 md:p-8 font-sans text-slate-800 overflow-auto">
+      <div className="max-w-3xl mx-auto space-y-6">
+        {/* 標題區 + 輸入 + 輸出 */}
+        <div className="text-center space-y-2">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+            <IconType /> 繁簡與標點全自動轉換器
+          </h1>
+          <p className="text-slate-500 text-sm md:text-base">
+            自動將「簡體轉繁體」並將「半形標點轉為全形」。
+            {!converterReady && (
+              <span className="inline-flex items-center ml-2 text-amber-600 text-xs">
+                <IconRefreshCw className="w-3 h-3 mr-1 spin" /> 轉換核心載入中...
+              </span>
+            )}
+          </p>
+        </div>
 
-    {/* 上方輸入區 */}
-    <div className="flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="flex justify-between items-center px-4 py-2 bg-slate-100 border-b border-slate-200">
-        <label className="text-sm font-semibold text-slate-600">輸入文字 (簡/繁/半形標點)</label>
-        {inputText && (
-          <button onClick={handleClear} className="text-xs flex items-center text-slate-400 hover:text-red-500 transition-colors">
-            <IconTrash2 /> 清空
+        {/* 上方輸入區 */}
+        <div className="flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="flex justify-between items-center px-4 py-2 bg-slate-100 border-b border-slate-200">
+            <label className="text-sm font-semibold text-slate-600">
+              輸入文字 (簡/繁/半形標點)
+            </label>
+            {inputText && (
+              <button
+                onClick={handleClear}
+                className="text-xs flex items-center text-slate-400 hover:text-red-500 transition-colors"
+              >
+                <IconTrash2 /> 清空
+              </button>
+            )}
+          </div>
+          <textarea
+            className="flex-1 p-4 resize-none outline-none text-base md:text-lg leading-relaxed"
+            placeholder="請在此貼上文字，系統會自動處理..."
+            value={inputText}
+            onChange={handleInputChange}
+            spellCheck="false"
+          />
+        </div>
+
+        {/* 輸入工具列 */}
+        <div className="flex justify-end mb-2">
+          <button
+            onClick={handlePaste}
+            className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow hover:bg-blue-700 transition"
+          >
+            📋 貼上剪貼簿
           </button>
-        )}
+        </div>
+
+        {/* 下方輸出區 */}
+        <div className="relative flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-visible group">
+          <div className="flex justify-between items-center px-4 py-2 bg-blue-50 border-b border-blue-100">
+            <label className="text-sm font-semibold text-blue-800">
+              轉換結果 (繁體 + 全形標點)
+            </label>
+            <button
+              onClick={handleCopy}
+              disabled={!outputText}
+              className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
+                !outputText
+                  ? 'opacity-50 cursor-not-allowed text-slate-400'
+                  : isCopied
+                  ? 'bg-green-500 text-white'
+                  : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50'
+              }`}
+            >
+              {isCopied ? (
+                <>
+                  <IconCheck className="w-3 h-3" /> 已複製
+                </>
+              ) : (
+                <>
+                  <IconCopy className="w-3 h-3" /> 複製內容
+                </>
+              )}
+            </button>
+          </div>
+          <div className="p-4 w-full bg-slate-50/50 text-base md:text-lg leading-relaxed text-slate-800 cursor-text whitespace-pre-wrap">
+            {outputText}
+          </div>
+        </div>
+
+        <div className="text-center text-xs text-slate-400">
+          <p>
+            注意：特殊數學符號或程式碼建議分開處理，以免標點被意外轉換。
+          </p>
+          <p className="mt-1">
+            此為單機版，請確保網路連線以載入轉換核心。
+          </p>
+        </div>
       </div>
-      <textarea
-        className="flex-1 p-4 resize-none outline-none text-base md:text-lg leading-relaxed"
-        placeholder="請在此貼上文字，系統會自動處理..."
-        value={inputText}
-        onChange={handleInputChange}
-        spellCheck="false"
-      />
     </div>
 
-    {/* 輸入工具列 */}
-    <div className="flex justify-end mb-2">
+    {/* ✅ 回到頂部按鈕 - 只放一次在 fragment 外層 */}
+    {outputText && (
       <button
-        onClick={handlePaste}
-        className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow hover:bg-blue-700 transition"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
       >
-        📋 貼上剪貼簿
+        ⬆ 回到頂部
       </button>
-    </div>
+    )}
+  </>
+);
 
-    {/* 下方輸出區 */}
-    <div className="relative flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-visible group">
-      <div className="flex justify-between items-center px-4 py-2 bg-blue-50 border-b border-blue-100">
-        <label className="text-sm font-semibold text-blue-800">轉換結果 (繁體 + 全形標點)</label>
-        <button
-          onClick={handleCopy}
-          disabled={!outputText}
-          className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${
-            !outputText ? 'opacity-50 cursor-not-allowed text-slate-400' : isCopied ? 'bg-green-500 text-white' : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50'
-          }`}
-        >
-          {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
-        </button>
-      </div>
-      <div className="p-4 w-full bg-slate-50/50 text-base md:text-lg leading-relaxed text-slate-800 cursor-text whitespace-pre-wrap">
-        {outputText}
-      </div>
-    </div>
-
-    <div className="text-center text-xs text-slate-400">
-      <p>注意：特殊數學符號或程式碼建議分開處理，以免標點被意外轉換。</p>
-      <p className="mt-1">此為單機版，請確保網路連線以載入轉換核心。</p>
-    </div>
-  </div>
-
-  {/* ✅ 回到頂部按鈕 - 只放一次在最外層 */}
-  {outputText && (
-    <button
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
-    >
-      ⬆ 回到頂部
-    </button>
-  )}
-</div>
-
-            );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
