@@ -3,74 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <title>轉換斜體格式</title>
-
 <style>
-  body { 
-    font-family: Arial, sans-serif; 
-    padding: 20px; 
-    max-width: 800px; 
-    margin: auto; 
-    background-color: #f9f9f9; 
-  }
-
+  body { font-family: Arial, sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f9f9f9; }
   h2 { text-align: center; color: #333; }
-
-  textarea { 
-    width: 100%; 
-    height: 200px; 
-    margin-bottom: 10px; 
-    padding: 10px; 
-    font-size: 16px; 
-    border: 1px solid #ccc; 
-    border-radius: 5px;
-    resize: none;
-  }
-
-  /* 固定輸出高度、可滾動 */
-  #output {
-    width: 100%;
-    height: 200px; 
-    box-sizing: border-box;
-    white-space: pre-wrap;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    overflow-y: auto;
-  }
-
-  button { 
-    padding: 10px 20px; 
-    font-size: 16px; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    transition: 0.2s; 
-  }
-
+  textarea { width: 100%; height: 200px; margin-bottom: 10px; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+  textarea, #output {
+  width: 100%;
+  box-sizing: border-box; /* 讓 padding 與 border 也算在 100% 內 */
+}
+  button { padding: 10px 20px; font-size: 16px; margin: 5px; border: none; border-radius: 5px; cursor: pointer; transition: 0.2s; }
   button:hover { opacity: 0.8; }
-
   #pasteBtn { background-color: #4CAF50; color: white; }
   #copyBtn { background-color: #2196F3; color: white; }
   #downloadBtn { background-color: #FF9800; color: white; }
-
+  #output { white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; margin-top: 10px; min-height: 200px; border-radius: 5px; background-color: #fff; }
   label { font-weight: bold; color: #555; }
-
-  /* 🔵 按鈕容器：桌機一排、手機兩個一排 */
-  .btn-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  /* 手機：按鈕一列兩個 */
   @media (max-width: 600px) {
-    .btn-row button {
-      flex: 1 1 calc(50% - 10px);
-      margin: 0;
-    }
+    button { width: 100%; margin-top: 10px; }
   }
 </style>
 </head>
@@ -84,23 +33,21 @@
 
 <label>輸入欄位：</label>
 <textarea id="inputText" placeholder="在這裡貼上或輸入文字"></textarea>
+<br>
 
-<!-- 🔵 手機一列兩個按鈕區 -->
-<div class="btn-row" style="margin-top:10px;">
+<div style="text-align: center; margin-top: 10px;">
   <button id="pasteBtn">📋 貼上</button>
   <button id="copyBtn">✂️ 複製</button>
 </div>
-
+  
 <h3>轉換結果：</h3>
 <div id="output"></div>
-
-<!-- 下方兩個按鈕（依舊手機兩個並排） -->
-<div class="btn-row" style="margin-top:15px;">
+<br>
+<div style="text-align: center; margin-top: 10px;">
   <button onclick="runTransform()">轉換</button>
   <button id="downloadBtn">⬇️ 下載 (.txt)</button>
 </div>
-
-
+  
 <script>
 let latestOutput = "";
 
@@ -144,7 +91,7 @@ function downloadText() {
 const inputArea = document.getElementById("inputText");
 const outputArea = document.getElementById("output");
 
-// 貼上
+// 一鍵貼上
 document.getElementById("pasteBtn").addEventListener("click", async () => {
   try {
     const text = await navigator.clipboard.readText();
@@ -155,13 +102,13 @@ document.getElementById("pasteBtn").addEventListener("click", async () => {
   }
 });
 
-// 複製
+// 一鍵複製
 document.getElementById("copyBtn").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(outputArea.innerText);
     const btn = document.getElementById("copyBtn");
     btn.innerText = "已複製！";
-    setTimeout(() => btn.innerText = "✂️ 複製", 1200);
+    setTimeout(() => btn.innerText = "✂️ 複製結果", 1200);
   } catch {
     alert("⚠️ 複製失敗，請手動選取");
   }
@@ -182,7 +129,7 @@ document.getElementById('fileInput').addEventListener('change', function(event){
   reader.readAsText(file, "UTF-8");
 });
 
-// 輸入即時轉換
+// 直接輸入即時轉換
 inputArea.addEventListener("input", runTransform);
 </script>
 
