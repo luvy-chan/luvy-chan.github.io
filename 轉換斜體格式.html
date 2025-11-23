@@ -33,7 +33,7 @@
     border-radius: 5px;
     background-color: #fff;
 
-    /* 📌 新增：固定高度＋卷軸 */
+    /* 📌 固定高度＋卷軸 */
     height: 200px;
     overflow-y: auto;
   }
@@ -47,34 +47,32 @@
     cursor: pointer;
     transition: 0.2s;
   }
-
   button:hover { opacity: 0.8; }
 
   #pasteBtn { background-color: #4CAF50; color: white; }
   #copyBtn { background-color: #2196F3; color: white; }
   #downloadBtn { background-color: #FF9800; color: white; }
+  .transform-btn { background-color: #9c27b0; color: white; }
 
   label { font-weight: bold; color: #555; }
 
-  /* 📱 新增：手機友善按鈕排列 (1 列 2 個) */
+  /* 📱 手機：兩欄按鈕 */
   .button-row {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
   }
-
   .button-row button {
-    flex: 0 0 calc(50% - 10px); /* 兩欄 */
+    flex: 0 0 calc(50% - 10px);
   }
 
-  /* 🖥️ 桌機恢復原來按鈕大小 */
+  /* 🖥️ 桌機恢復按鈕原尺寸 */
   @media (min-width: 601px) {
     .button-row button {
       flex: 0 0 auto;
     }
   }
-
 </style>
 </head>
 <body>
@@ -88,7 +86,7 @@
 <label>輸入欄位：</label>
 <textarea id="inputText" placeholder="在這裡貼上或輸入文字"></textarea>
 
-<!-- 📌 按鈕排成 2 欄 -->
+<!-- 📌 兩欄貼上＋複製 -->
 <div class="button-row" style="margin-top:10px;">
   <button id="pasteBtn">📋 貼上</button>
   <button id="copyBtn">✂️ 複製</button>
@@ -97,14 +95,16 @@
 <h3>轉換結果：</h3>
 <div id="output"></div>
 
+<!-- 📌 兩欄：轉換＋下載 -->
 <div class="button-row" style="margin-top:10px;">
-  <button onclick="runTransform()">轉換</button>
+  <button class="transform-btn" onclick="runTransform()">轉換</button>
   <button id="downloadBtn">⬇️ 下載 (.txt)</button>
 </div>
 
 <script>
 let latestOutput = "";
 
+/* 巨集：完整保留你的原始規則 */
 function transformText(text) {
   text = text.replace(/(^|\n)/g, "$1@#%");
   text = text.replace(/(\n|$)/g, "@#%$1");
@@ -118,13 +118,14 @@ function transformText(text) {
 }
 
 function runTransform() {
-  let input = inputArea.value;
+  const input = inputArea.value;
   if (!input) return;
-  let output = transformText(input);
+  const output = transformText(input);
   outputArea.textContent = output;
   latestOutput = output;
 }
 
+/* 下載 TXT */
 function downloadText() {
   if (!latestOutput) return alert("請先輸入或貼上文字！");
   const blob = new Blob([latestOutput], { type: "text/plain;charset=utf-8" });
@@ -138,9 +139,11 @@ function downloadText() {
   URL.revokeObjectURL(url);
 }
 
+/* 元素 */
 const inputArea = document.getElementById("inputText");
 const outputArea = document.getElementById("output");
 
+/* 一鍵貼上 */
 document.getElementById("pasteBtn").addEventListener("click", async () => {
   try {
     const text = await navigator.clipboard.readText();
@@ -151,6 +154,7 @@ document.getElementById("pasteBtn").addEventListener("click", async () => {
   }
 });
 
+/* 一鍵複製 */
 document.getElementById("copyBtn").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(outputArea.innerText);
@@ -162,19 +166,22 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
   }
 });
 
+/* 點擊下載 */
 document.getElementById("downloadBtn").addEventListener("click", downloadText);
 
-document.getElementById('fileInput').addEventListener('change', function(event){
+/* 上傳 TXT */
+document.getElementById('fileInput').addEventListener('change', event => {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = e => {
     inputArea.value = e.target.result;
     runTransform();
   };
   reader.readAsText(file, "UTF-8");
 });
 
+/* 即時轉換 */
 inputArea.addEventListener("input", runTransform);
 </script>
 
