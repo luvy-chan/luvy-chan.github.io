@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>繁簡與標點全自動轉換器</title>
+    <title>繁簡與標點全自動轉換.修改版</title>
     
     <!-- 1. 載入 Tailwind CSS (樣式庫) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -101,6 +101,11 @@
 
             const handleConvert = (text) => {
                 let processed = text;
+
+                // 🔵 先處理 ... 與 ......（優先級最高）
+                processed = processed.replace(/\.{6}/g, "……"); // 六個點 → 省略號
+                processed = processed.replace(/\.{3}/g, "……"); // 三個點 → 省略號
+
                 if (converterReady && openccRef.current) {
                     processed = openccRef.current(processed);
                 }
@@ -243,7 +248,8 @@
                         </div>
                         <div className="text-center text-xs text-slate-400">
                            <p>注意：特殊數學符號或程式碼建議分開處理，以免標點被意外轉換。</p>
-                           <p className="mt-1">此為單機版，請確保網路連線以載入轉換核心。</p>
+                           <p>此為單機版，請確保網路連線以載入轉換核心。</p>
+                           <p className="mt-1">來源：https://www.plurk.com/p/3hzo79yuvk</p>
                         </div>
                     </div>
                 </div>
