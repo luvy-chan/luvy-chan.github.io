@@ -13,6 +13,15 @@
     .ava-pc {
       display: none;
     } 
+    /* 電腦版（螢幕寬度大於 600px）縮短 PC 氣泡右邊距離 */
+@media (min-width: 600px) {
+  .pc .msg-container {
+    max-width: 360px;   /* 不會貼到最右邊，視覺更舒服 */
+    margin-left: auto;
+    margin-right: 0;    /* 讓右側靠邊但不黏死 */
+  }
+}
+
   </style>
 </head>
 <body>
