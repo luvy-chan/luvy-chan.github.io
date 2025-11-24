@@ -15,12 +15,12 @@
     } 
    /* 電腦版：讓右側訊息更靠內，不改手機 */
 @media (min-width: 600px) {
-  .pc .msg-content {
-    margin-right: 20px; /* 控制氣泡離右側距離 */
+  .pc .msg-container {
+    margin-left: auto;     /* 自動填滿左邊，右側靠邊 */
+    margin-right: 20px;    /* 調整距右邊距離 */
+    max-width: 360px;      /* 氣泡最大寬度，太寬就會貼邊 */
   }
 }
-
-
 
   </style>
 </head>
