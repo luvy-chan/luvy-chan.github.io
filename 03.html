@@ -74,6 +74,8 @@ function App() {
         let processed = text;
         if (converterReady && openccRef.current) processed = openccRef.current(processed);
         processed = convertPunctuation(processed);
+        // 🔽 把連續兩個以上換行壓成一個
+        processed = processed.replace(/\n{2,}/g, '\n');
         setOutputText(processed);
     };
 
