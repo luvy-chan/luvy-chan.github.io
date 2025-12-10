@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>繁簡與標點轉換器（LOFTER API 版）</title>
+    <title>繁簡與標點全自動轉換器（LOFTER API 版）</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -104,7 +104,7 @@ function App() {
         throw new Error("所有代理無法取得資料，最後錯誤：" + (lastError && lastError.message ? lastError.message : "未知錯誤"));
     }
 
-    /* ----------- LOFTER API 抓取文章（修正選擇器 V4 - 更強健） ----------- */
+    /* ----------- LOFTER API 抓取文章（修正選擇器 V5 - 極度強健） ----------- */
     async function fetchLofterArticle(urlInput) {
         // 檢查網址格式
         const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
@@ -137,21 +137,44 @@ function App() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
-        // *** 關鍵修正：使用更強健的選擇器序列 ***
+        // *** 關鍵修正：使用更強健的選擇器序列（V5 增強） ***
         let content = null;
         
-        // 嘗試 1: 最精確的內容區塊 (最常見)
+        // 嘗試 1: 最精確的內容區塊 (js-post-content)
         content = doc.querySelector(".js-post-content");
         
-        // 嘗試 2: 如果找不到，嘗試找上一層的文章容器
+        // 嘗試 2: 標準文章容器 (g-single-content)
         if (!content) {
             content = doc.querySelector(".g-single-content");
         }
         
-        // 嘗試 3: 最後的嘗試，找通用 post 容器
+        // 嘗試 3: 通用文章容器 (post-body)
         if (!content) {
             content = doc.querySelector(".post-body");
         }
+        
+        // 嘗試 4: 更廣泛的 HTML5 article 標籤
+        if (!content) {
+            content = doc.querySelector("article");
+        }
+        
+        // 嘗試 5: 根據 PostID 猜測 ID 選擇器 (針對老主題)
+        if (!content) {
+            const postIdMatch = urlInput.match(/post\/(\w+)/);
+            if (postIdMatch) {
+                content = doc.getElementById('post-' + postIdMatch[1]);
+            }
+        }
+        
+        // 嘗試 6: 極度通用，找最有可能的內容 wrapper div
+        if (!content) {
+            const allP = doc.querySelectorAll('p');
+            if (allP.length > 0) {
+                 // 找到所有 <p> 標籤的共同祖先，這裡簡化為第一個 p 的父元素
+                 content = allP[0].parentElement;
+            }
+        }
+        // **********************************************
 
         if (!content) {
             // 檢查是否是 LOFTER 錯誤頁面（例如 404）
@@ -160,7 +183,7 @@ function App() {
                 throw new Error('抓取失敗：文章可能已被刪除或不存在 (LOFTER 404 錯誤)');
             }
             
-            throw new Error("找不到文章內容容器。極可能原因：LOFTER 網頁結構再次變動，或所有 CORS 代理返回了不正確的 HTML。");
+            throw new Error("找不到文章內容容器。這是因為 LOFTER 網頁結構再次變動，或您使用的所有 CORS 代理都失效了。");
         }
 
         // 抓取所有段落 p 標籤 (從找到的 content 元素開始)
@@ -234,7 +257,7 @@ function App() {
             <div className="max-w-3xl mx-auto space-y-6">
                 <div className="text-center space-y-2">
                     <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
-                        <IconType /> 繁簡與標點全自動轉換器（LOFTER API）
+                        <IconType /> 繁簡與標點轉換器（LOFTER API）
                     </h1>
                     <p className="text-slate-500 text-sm">
                         自動將 LOFTER 網址文章 → 簡轉繁 → 全形標點
@@ -257,7 +280,7 @@ function App() {
                             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                         >📥 抓正文</button>
                     </div>
-                    <p className="text-xs text-slate-500 px-1">支援 LOFTER 文章自動抓取（若失敗可能是 CORS 代理失效）</p>
+                    <p className="text-xs text-slate-500 px-1">支援 LOFTER 文章自動抓取（若失敗請參考下方備註）</p>
                 </div>
 
                 {/* 輸入框 */}
