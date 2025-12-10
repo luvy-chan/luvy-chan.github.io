@@ -104,7 +104,7 @@ function App() {
     }
 
     /* ----------- LOFTER API 抓取文章（改為透過 fetchWithProxies） ----------- */
-    async function fetchLofterArticle(urlInput) {
+async function fetchLofterArticle(urlInput) {
     const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
     if (!match) throw new Error("網址格式錯誤（需要 user.lofter.com/post/xxxx）");
 
@@ -143,13 +143,15 @@ function App() {
 
     let text = Array.from(ps)
         .map(p => {
-            let t = p.innerHTML.replace(/<br\\s*\\/?>/gi, "\\n");
+            // *** 修正: 將 /<br\\s*\\/?>/gi 修正為 /<br\s*\/?>/gi，並將 "\\n" 修正為 "\n" ***
+            let t = p.innerHTML.replace(/<br\s*\/?>/gi, "\n"); 
             const d = document.createElement("div");
             d.innerHTML = t;
             return d.textContent.trim();
         })
         .filter(t => t.length > 0)
-        .join("\\n");
+        // *** 修正: 將 .join("\\n") 修正為 .join("\n") ***
+        .join("\n"); 
 
     return text.trim();
 }
