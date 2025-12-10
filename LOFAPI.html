@@ -69,9 +69,10 @@ function App() {
     /* ----------- 標點全形化 ----------- */
     const convertPunctuation = text => {
         const map = {
-            ',':'，','.':'。','?':'？','!':'！',':':'：',';':'；','(':'（',')':'）','[':'【',']':'】','{':'｛','}':'｝','<':'《','>':'》','/':'／','\\':'＼','|':'｜','@':'＠','#':'＃','$':'＄','%':'％','^':'︿','&':'＆','_':'＿','+':'＋','-':'－','=':'＝','~':'～','`':'‵','"':'「','"':'」'
+            ',':'，','.':'。','?':'？','!':'！',':':'：',';':'；','(':'（',')':'）','[':'【',']':'】','{':'｛','}':'｝','<':'《','>':'》','/':'／','\\':'＼','|':'｜','@':'＠','#':'＃','$':'＄','%':'％','^':'︿','&':'＆','_':'＿','+':'＋','-':'－','=':'＝','~':'～','`':'‵','"':'「',"\"":"」" // 修正最後一個 "
         };
-        return text.replace(/[,.?!:;()\[\]{}<>\/\\|@#$%^&_+\-=~`"\"]/g, m => map[m] || m);
+        // 修正正規表達式中的多餘反斜線
+        return text.replace(/[,.?!:;()[\]{}<>\/\\|@#$%^&_+\-=~`"]/g, m => map[m] || m);
     };
 
     /* ----------- 主轉換流程 ----------- */
@@ -83,7 +84,7 @@ function App() {
         setOutputText(t);
     };
 
-    /* ----------- 改動重點：使用 Proxy 以繞過 CORS 阻擋 ----------- */
+    /* ----------- 改動重點：使用 Proxy 以繞過 CORS 阻擋 (維持不變) ----------- */
     async function fetchWithProxies(url) {
         const proxies = [
             "https://corsproxy.io/?",
@@ -103,58 +104,75 @@ function App() {
         throw new Error("所有代理無法取得資料，最後錯誤：" + (lastError && lastError.message ? lastError.message : "未知錯誤"));
     }
 
-    /* ----------- LOFTER API 抓取文章（改為透過 fetchWithProxies） ----------- */
-async function fetchLofterArticle(urlInput) {
-    const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
-    if (!match) throw new Error("網址格式錯誤（需要 user.lofter.com/post/xxxx）");
+    /* ----------- LOFTER API 抓取文章（修正選擇器 V3） ----------- */
+    async function fetchLofterArticle(urlInput) {
+        // 檢查網址格式
+        const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
+        if (!match) throw new Error("網址格式錯誤（需要 user.lofter.com/post/xxxx）");
 
-    const postId = match[2];
-    const mobileUrl = "https://m.lofter.com/post/" + postId;
+        // *** 修正: 直接使用輸入的 URL，不再使用 m.lofter.com ***
+        const targetUrl = urlInput; 
 
-    // 用代理抓 m.lofter.com（內容一定是 HTML，不會 JSON）
-    const proxies = [
-        "https://corsproxy.io/?",
-        "https://api.allorigins.win/raw?url=",
-        "https://api.codetabs.com/v1/proxy?quest="
-    ];
+        const proxies = [
+            "https://corsproxy.io/?",
+            "https://api.allorigins.win/raw?url=",
+            "https://api.codetabs.com/v1/proxy?quest="
+        ];
 
-    let html = null;
-    for (const p of proxies) {
-        try {
-            const r = await fetch(p + encodeURIComponent(mobileUrl));
-            if (r.ok) {
-                html = await r.text();
-                break;
-            }
-        } catch (e) {}
+        let html = null;
+        for (const p of proxies) {
+            try {
+                // 對 targetUrl 進行編碼
+                const r = await fetch(p + encodeURIComponent(targetUrl));
+                if (r.ok) {
+                    html = await r.text();
+                    break;
+                }
+            } catch (e) {}
+        }
+
+        if (!html) throw new Error("所有代理都失敗或 LOFTER 網址無法存取，請檢查代理是否失效");
+
+        // 解析 HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        // *** 關鍵修正：更新為 LOFTER 標準網頁的文章內容選擇器 ***
+        // 尋找文章主容器，通常是 #container .g-single-content
+        const content = doc.querySelector("#container .g-single-content");
+        if (!content) throw new Error("找不到文章主容器 (#container .g-single-content)");
+
+        // 尋找實際包含正文的區塊 (js-post-content)
+        const postBody = content.querySelector(".js-post-content");
+        
+        // 如果找不到 js-post-content，則使用 content 作為 fallback
+        const targetElement = postBody || content;
+
+        // 抓取所有段落 p 標籤
+        const ps = targetElement.querySelectorAll("p");
+        
+        // 處理段落和換行
+        let text = Array.from(ps)
+            .map(p => {
+                // *** 修正: 修正反斜線和換行符號 ***
+                // 將 <br> 替換為 \n
+                let t = p.innerHTML.replace(/<br\s*\/?>/gi, "\n"); 
+                const d = document.createElement("div");
+                d.innerHTML = t;
+                return d.textContent.trim();
+            })
+            .filter(t => t.length > 0)
+            .join("\n"); // *** 修正: 修正 join("\n") ***
+
+        // Fallback: 如果解析 p 標籤失敗，嘗試直接抓取目標元素的 textContent
+        if (!text) {
+             text = targetElement.textContent.trim();
+        }
+
+        if (!text) throw new Error("文章內容解析為空，請檢查 LOFTER 網頁結構是否再次變動");
+
+        return text.trim();
     }
-
-    if (!html) throw new Error("所有代理都失敗");
-
-    // 解析 HTML
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
-    // 手機版正文
-    const content = doc.querySelector(".content");
-    if (!content) throw new Error("找不到文章內容");
-
-    const ps = content.querySelectorAll("p");
-
-    let text = Array.from(ps)
-        .map(p => {
-            // *** 修正: 將 /<br\\s*\\/?>/gi 修正為 /<br\s*\/?>/gi，並將 "\\n" 修正為 "\n" ***
-            let t = p.innerHTML.replace(/<br\s*\/?>/gi, "\n"); 
-            const d = document.createElement("div");
-            d.innerHTML = t;
-            return d.textContent.trim();
-        })
-        .filter(t => t.length > 0)
-        // *** 修正: 將 .join("\\n") 修正為 .join("\n") ***
-        .join("\n"); 
-
-    return text.trim();
-}
 
 
     /* ----------- 抓文章按鈕事件 ----------- */
@@ -205,7 +223,7 @@ async function fetchLofterArticle(urlInput) {
                         <IconType /> 繁簡與標點全自動轉換器（LOFTER API）
                     </h1>
                     <p className="text-slate-500 text-sm">
-                        自動將 LOFTER API 抓取文章 → 簡轉繁 → 全形標點
+                        自動將 LOFTER 網址文章 → 簡轉繁 → 全形標點
                     </p>
                 </div>
 
@@ -225,7 +243,7 @@ async function fetchLofterArticle(urlInput) {
                             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
                         >📥 抓正文</button>
                     </div>
-                    <p className="text-xs text-slate-500 px-1">支援 LOFTER 文章自動抓取（若失敗請參考下方備註）</p>
+                    <p className="text-xs text-slate-500 px-1">支援 LOFTER 文章自動抓取（若失敗可能是 CORS 代理失效）</p>
                 </div>
 
                 {/* 輸入框 */}
