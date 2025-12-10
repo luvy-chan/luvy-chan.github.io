@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>繁簡與標點全自動轉換器（LOFTER API 版）</title>
+    <title>繁簡與標點轉換器（LOFTER API 版）</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -69,7 +69,7 @@ function App() {
     /* ----------- 標點全形化 ----------- */
     const convertPunctuation = text => {
         const map = {
-            ',':'，','.':'。','?':'？','!':'！',':':'：',';':'；','(':'（',')':'）','[':'【',']':'】','{':'｛','}':'｝','<':'《','>':'》','/':'／','\\':'＼','|':'｜','@':'＠','#':'＃','$':'＄','%':'％','^':'︿','&':'＆','_':'＿','+':'＋','-':'－','=':'＝','~':'～','`':'‵','"':'「',"\"":"」" // 修正最後一個 "
+            ',':'，','.':'。','?':'？','!':'！',':':'：',';':'；','(':'（',')':'）','[':'【',']':'】','{':'｛','}':'｝','<':'《','>':'》','/':'／','\\':'＼','|':'｜','@':'＠','#':'＃','$':'＄','%':'％','^':'︿','&':'＆','_':'＿','+':'＋','-':'－','=':'＝','~':'～','`':'‵','"':'「',"\"":"」" 
         };
         // 修正正規表達式中的多餘反斜線
         return text.replace(/[,.?!:;()[\]{}<>\/\\|@#$%^&_+\-=~`"]/g, m => map[m] || m);
@@ -104,7 +104,7 @@ function App() {
         throw new Error("所有代理無法取得資料，最後錯誤：" + (lastError && lastError.message ? lastError.message : "未知錯誤"));
     }
 
-    /* ----------- LOFTER API 抓取文章（修正選擇器 V3） ----------- */
+    /* ----------- LOFTER API 抓取文章（修正選擇器 V4 - 更強健） ----------- */
     async function fetchLofterArticle(urlInput) {
         // 檢查網址格式
         const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
@@ -131,45 +131,59 @@ function App() {
             } catch (e) {}
         }
 
-        if (!html) throw new Error("所有代理都失敗或 LOFTER 網址無法存取，請檢查代理是否失效");
+        if (!html) throw new Error("抓取失敗：所有代理都失效或 LOFTER 網址無法存取。");
 
         // 解析 HTML
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, "text/html");
 
-        // *** 關鍵修正：更新為 LOFTER 標準網頁的文章內容選擇器 ***
-        // 尋找文章主容器，通常是 #container .g-single-content
-        const content = doc.querySelector("#container .g-single-content");
-        if (!content) throw new Error("找不到文章主容器 (#container .g-single-content)");
-
-        // 尋找實際包含正文的區塊 (js-post-content)
-        const postBody = content.querySelector(".js-post-content");
+        // *** 關鍵修正：使用更強健的選擇器序列 ***
+        let content = null;
         
-        // 如果找不到 js-post-content，則使用 content 作為 fallback
-        const targetElement = postBody || content;
+        // 嘗試 1: 最精確的內容區塊 (最常見)
+        content = doc.querySelector(".js-post-content");
+        
+        // 嘗試 2: 如果找不到，嘗試找上一層的文章容器
+        if (!content) {
+            content = doc.querySelector(".g-single-content");
+        }
+        
+        // 嘗試 3: 最後的嘗試，找通用 post 容器
+        if (!content) {
+            content = doc.querySelector(".post-body");
+        }
 
-        // 抓取所有段落 p 標籤
-        const ps = targetElement.querySelectorAll("p");
+        if (!content) {
+            // 檢查是否是 LOFTER 錯誤頁面（例如 404）
+            const title = doc.querySelector('title')?.textContent || '';
+            if (title.includes('404')) {
+                throw new Error('抓取失敗：文章可能已被刪除或不存在 (LOFTER 404 錯誤)');
+            }
+            
+            throw new Error("找不到文章內容容器。極可能原因：LOFTER 網頁結構再次變動，或所有 CORS 代理返回了不正確的 HTML。");
+        }
+
+        // 抓取所有段落 p 標籤 (從找到的 content 元素開始)
+        const ps = content.querySelectorAll("p");
         
         // 處理段落和換行
         let text = Array.from(ps)
             .map(p => {
-                // *** 修正: 修正反斜線和換行符號 ***
-                // 將 <br> 替換為 \n
+                // *** 修正: 修正反斜線和換行符號（避免Babel錯誤）***
                 let t = p.innerHTML.replace(/<br\s*\/?>/gi, "\n"); 
                 const d = document.createElement("div");
                 d.innerHTML = t;
                 return d.textContent.trim();
             })
             .filter(t => t.length > 0)
-            .join("\n"); // *** 修正: 修正 join("\n") ***
+            .join("\n"); 
 
         // Fallback: 如果解析 p 標籤失敗，嘗試直接抓取目標元素的 textContent
         if (!text) {
-             text = targetElement.textContent.trim();
+            text = content.textContent.trim();
         }
 
-        if (!text) throw new Error("文章內容解析為空，請檢查 LOFTER 網頁結構是否再次變動");
+        if (!text) throw new Error("文章內容解析為空。");
 
         return text.trim();
     }
