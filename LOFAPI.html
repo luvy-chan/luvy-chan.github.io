@@ -105,34 +105,55 @@ function App() {
 
     /* ----------- LOFTER API 抓取文章（改為透過 fetchWithProxies） ----------- */
     async function fetchLofterArticle(urlInput) {
-        const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
-        if (!match) throw new Error("網址格式錯誤（需要 user.lofter.com/post/xxxx）");
+    const match = urlInput.match(/https:\/\/(.+?)\.lofter\.com\/post\/(\w+)/);
+    if (!match) throw new Error("網址格式錯誤（需要 user.lofter.com/post/xxxx）");
 
-        const user = match[1];
-        const postId = match[2];
-        const apiUrl = `https://api.lofter.com/v2.0/blog/${user}/post/${postId}`;
+    const postId = match[2];
+    const mobileUrl = "https://m.lofter.com/post/" + postId;
 
-        // 使用代理輪詢，避免 CORS 阻擋
-        const res = await fetchWithProxies(apiUrl);
-        if (!res || !res.ok) throw new Error("Failed to fetch（可能被 CORS 阻擋或代理失敗）");
+    // 用代理抓 m.lofter.com（內容一定是 HTML，不會 JSON）
+    const proxies = [
+        "https://corsproxy.io/?",
+        "https://api.allorigins.win/raw?url=",
+        "https://api.codetabs.com/v1/proxy?quest="
+    ];
 
-        const data = await res.json();
-        if (!data.posts || !data.posts.length) throw new Error("找不到文章內容");
+    let html = null;
+    for (const p of proxies) {
+        try {
+            const r = await fetch(p + encodeURIComponent(mobileUrl));
+            if (r.ok) {
+                html = await r.text();
+                break;
+            }
+        } catch (e) {}
+    }
 
-        const html = data.posts[0].content;
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
-        const ps = Array.from(doc.querySelectorAll("p"));
+    if (!html) throw new Error("所有代理都失敗");
 
-        let text = ps.map(p => {
-            let t = p.innerHTML.replace(/<br\s*\/?>/gi, "\n");
+    // 解析 HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    // 手機版正文
+    const content = doc.querySelector(".content");
+    if (!content) throw new Error("找不到文章內容");
+
+    const ps = content.querySelectorAll("p");
+
+    let text = Array.from(ps)
+        .map(p => {
+            let t = p.innerHTML.replace(/<br\\s*\\/?>/gi, "\\n");
             const d = document.createElement("div");
             d.innerHTML = t;
             return d.textContent.trim();
-        }).filter(t => t.length > 0).join("\n");
+        })
+        .filter(t => t.length > 0)
+        .join("\\n");
 
-        return text.trim();
-    }
+    return text.trim();
+}
+
 
     /* ----------- 抓文章按鈕事件 ----------- */
     const fetchHandler = async () => {
