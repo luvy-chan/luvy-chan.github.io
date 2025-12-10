@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>繁簡與標點全自動轉換(LOF版)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>
+
+    <style>
+        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; }
+        /* 簡單的旋轉動畫 */
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- 圖示組件 (內嵌 SVG 以避免依賴外部庫) ---
+        const IconType = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+        );
+        const IconRefreshCw = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>
+        );
+        const IconTrash2 = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+        );
+        const IconCopy = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        );
+        const IconCheck = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 6 9 17 4 12"></polyline></svg>
+        );
+
+        // --- 主程式 ---
+        function App() {
+            const [inputText, setInputText] = useState('');
+            const [outputText, setOutputText] = useState('');
+            const [isCopied, setIsCopied] = useState(false);
+            const [converterReady, setConverterReady] = useState(false);
+            const openccRef = useRef(null);
+
+            // 載入 OpenCC
+            useEffect(() => {
+                const initConverter = () => {
+                    if (window.OpenCC) {
+                        try {
+                            openccRef.current = window.OpenCC.Converter({ from: 'cn', to: 'tw' });
+                            setConverterReady(true);
+                        } catch (e) {
+                            console.error("OpenCC init error:", e);
+                        }
+                    } else {
+                        setTimeout(initConverter, 500);
+                    }
+                };
+                initConverter();
+            }, []);
+
+            const convertPunctuation = (text) => {
+                let result = text;
+                const punctMap = {
+                    ',': '，', '.': '。', '?': '？', '!': '！', ':': '：', ';': '；',
+                    '(': '（', ')': '）', '[': '【', ']': '】', '{': '｛', '}': '｝',
+                    '<': '《', '>': '》', '/': '／', '\\': '＼', '|': '｜',
+                    '@': '＠', '#': '＃', '$': '＄', '%': '％', '^': '︿', '&': '＆',
+                    '_': '＿', '+': '＋', '-': '－', '=': '＝', '~': '～', '`': '‵',
+                    '“': '「', '”': '」', '‘': '『', '’': '』'                  
+                };
+
+                result = result.replace(/[,.? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`“”‘’]/g, (match) => {
+                    return punctMap[match] || match;
+                });
+                
+                result = result.replace(/"/g, '」');
+                result = result.replace(/'/g, '’');
+                
+                return result;
+            };
+
+            const handleConvert = (text) => {
+                let processed = text;
+
+                // 步驟 1: HTML 轉純文字 
+                if (processed.includes('<') || processed.includes('《')) {
+                    let htmlCleaned = processed.replace(/《/g, '<').replace(/》/g, '>'); 
+                    
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = htmlCleaned;
+                    
+                    processed = tempDiv.textContent || '';
+                    
+                    processed = processed.replace(/(\n\s*){2,}/g, '\n\n').trim(); 
+                }
+
+                // 步驟 2: 處理省略號
+                processed = processed.replace(/\.{6}/g, "……"); 
+                processed = processed.replace(/\.{3}/g, "……"); 
+                
+                // 步驟 3: 簡轉繁
+                if (converterReady && openccRef.current) {
+                    processed = openccRef.current(processed);
+                }
+                
+                // 步驟 4: 標點全形化
+                processed = convertPunctuation(processed);
+                
+                setOutputText(processed);
+            };
+
+            const handleInputChange = (e) => {
+                const text = e.target.value;
+                setInputText(text);
+                handleConvert(text);
+            };
+
+            const handleCopy = () => {
+                if (!outputText) return;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(outputText)
+                        .then(() => {
+                            setIsCopied(true);
+                            setTimeout(() => setIsCopied(false), 2000);
+                        });
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = outputText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    setIsCopied(true);
+                    setTimeout(() => setIsCopied(false), 2000);
+                }
+            };
+
+
+            const handlePaste = async () => {
+                try {
+                const text = await navigator.clipboard.readText();
+                    setInputText(text);
+                    handleConvert(text);
+                } catch (err) {
+                    alert("無法讀取剪貼簿，請確認瀏覽器權限！");
+                }
+            };
+
+            
+            const handleClear = () => {
+                setInputText('');
+                setOutputText('');
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8 font-sans text-slate-800">
+                    <div className="max-w-3xl mx-auto space-y-6">
+                        
+                        {/* 標題區 */}
+                        <div className="text-center space-y-2">
+                            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
+                                <IconType />
+                                繁簡與標點轉換（LOF）
+                            </h1>
+                            <p className="text-slate-500 text-sm md:text-base">
+                                支援 HTML 自動轉純文字 → 簡體轉繁體 → 半形標點轉為全形。
+                                {!converterReady && (
+                                    <span className="inline-flex items-center ml-2 text-amber-600 text-xs">
+                                        <IconRefreshCw className="w-3 h-3 mr-1 spin" />
+                                        轉換核心載入中...
+                                    </span>
+                                )}
+                            </p>
+                        </div>
+
+                        {/* 主介面 - 移除 Grid 和固定高度，改用 space-y 讓內容自動流動 */}
+                        <div className="space-y-4"> 
+                            
+                            {/* 上方輸入 - 限制高度為 h-64 (256px) 並維持內部滾動 */}
+                            <div className="flex flex-col bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-64">
+                                <div className="flex justify-between items-center px-4 py-2 bg-slate-100 border-b border-slate-200">
+                                    <label className="text-sm font-semibold text-slate-600">
+                                        輸入
+                                    </label>
+
+                                    <div className="flex items-center gap-2">
+                                        {inputText && (
+                                            <button
+                                                onClick={handleClear}
+                                                className="text-xs flex items-center text-slate-400 hover:text-red-500 transition-colors"
+                                            >
+                                                <IconTrash2 /> 清空
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <textarea
+                                    className="flex-1 p-4 resize-none outline-none text-base md:text-lg leading-relaxed"
+                                    placeholder="請在此貼上文字，系統會自動處理 HTML 標籤、繁簡及標點..."
+                                    value={inputText}
+                                    onChange={handleInputChange}
+                                    spellCheck="false"
+                                />
+                            </div>
+                           
+                            {/* 貼上按鈕 */}
+                            <div className="flex justify-end mb-2">
+                                <button
+                                    onClick={handlePaste}
+                                    className="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold shadow hover:bg-blue-700 transition"
+                                >
+                                    📋 貼上
+                                </button>
+                            </div>
+
+
+                            {/* 下方輸出 - 移除 textarea，改用 div 讓內容自動展開 */}
+                            <div className="relative bg-white rounded-xl shadow-sm border border-blue-200 group">
+                                <div className="flex justify-between items-center px-4 py-2 bg-blue-50 border-b border-blue-100">
+                                    <label className="text-sm font-semibold text-blue-800">轉換結果 </label>
+                                    <button
+                                        onClick={handleCopy}
+                                        disabled={!outputText}
+                                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 ${!outputText ? 'opacity-50 cursor-not-allowed text-slate-400' : isCopied ? 'bg-green-500 text-white' : 'bg-white text-blue-600 border border-blue-200 hover:bg-blue-50'}`}
+                                    >
+                                        {isCopied ? <><IconCheck className="w-3 h-3" /> 已複製</> : <><IconCopy className="w-3 h-3" /> 複製內容</>}
+                                    </button>
+                                </div>
+                                {/* 使用 div 替代 textarea，並用 whitespace-pre-wrap 保持換行和空格 */}
+                                <div
+                                    className="p-4 bg-slate-50/50 text-base md:text-lg leading-relaxed text-slate-800 whitespace-pre-wrap cursor-text"
+                                    style={{ minHeight: '100px' }} // 確保即使內容很少也有可視空間
+                                >
+                                    {outputText || "轉換後的結果會顯示在這裡..."}
+                                </div>
+                                
+                                {/* 手機版複製按鈕 (維持原來的絕對定位和隱藏邏輯) */}
+                                {outputText && (
+                                    <button onClick={handleCopy} className={`md:hidden absolute bottom-4 right-4 p-3 rounded-full shadow-lg transition-all transform active:scale-95 ${isCopied ? 'bg-green-500 text-white' : 'bg-blue-600 text-white'}`}>
+                                        {isCopied ? <IconCheck className="w-6 h-6" /> : <IconCopy className="w-6 h-6" />}
+                                    </button>
+                                )}
+                            </div>
+
+                        </div>
+                        <div className="text-center text-xs text-slate-400 mt-6"> {/* 增加間距 */}
+                          
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
