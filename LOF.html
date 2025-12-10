@@ -260,17 +260,18 @@
                         </div>
                     </div>
                 </div>
-            {/* 回到頂部 */}
-        {outputText && (
-            <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
-            >
-                ⬆ 回到頂部
-            </button>
-        )}
-        </>
-    );
+                    
+                    {/* 回到頂部按鈕，現在已被正確包裝在 Fragment 內 */}
+                    {outputText && (
+                        <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            className="fixed bottom-6 right-6 z-50 px-4 py-2 rounded-full bg-blue-600 text-white shadow-lg hover:bg-blue-700 transition"
+                        >
+                            ⬆ 回到頂部
+                        </button>
+                    )}
+                </>
+            );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
