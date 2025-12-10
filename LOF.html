@@ -15,23 +15,16 @@
     <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>
 
     <style>
-        a, a:hover, .day{color:#828d95;}
-        .sidelist{min-width:535px;}
-        .sidelist li a, .tag a, .active{background-color:#828d95;}
-        .day{ border-color:#828d95;}
-        .text blockquote{ border-left-color:#828d95;}
-        body{background-color:#dfdfe1;}
-        #morecontent_frame{margin-top:30px;}
-        body{background-image:url(//imglf3.lf127.net/img/1553236065974180.png);}
-        body{background-attachment:fixed;}
-        .notes .action{width:500px;}
-        body { font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; }
+         body { 
+        font-family: "Microsoft JhengHei", "Heiti TC", sans-serif; 
+        
+        background-color: #dfdfe1; 
+        }
         /* 簡單的旋轉動畫 */
         .spin { animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body class="bg-slate-50">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -251,8 +244,8 @@
                                 </div>
                                 {/* 使用 div 替代 textarea，並用 whitespace-pre-wrap 保持換行和空格 */}
                                 <div
-                                    className="p-4 bg-white text-base md:text-lg leading-relaxed text-slate-700 whitespace-pre-wrap cursor-text"
-                                    style={{ minHeight: '100px' }} // 確保即使內容很少也有可視空間
+                                    className="p-4 bg-white text-base md:text-lg leading-relaxed whitespace-pre-wrap cursor-text"
+                                    style={{ minHeight: '100px', color: '#737373' }} // 確保即使內容很少也有可視空間
                                 >
                                     {outputText || "轉換後的結果會顯示在這裡..."}
                                 </div>
