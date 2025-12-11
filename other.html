@@ -1,0 +1,353 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旁白格式斜體轉粗體</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9ff;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f2ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #764ba2;
+            background: #e8ebff;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #667eea;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 13px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            background: #f8f9ff;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .file-name {
+            color: #333;
+            font-size: 14px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .file-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .status-ready {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄旁白格式斜體轉粗體</h1>
+        <p class="subtitle">批量處理 HTML 檔案，自動轉換粗體樣式</p>
+
+        <div class="upload-area" id="uploadArea">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">點擊或拖曳檔案到此處</div>
+            <div class="upload-hint">支援單個或多個 HTML 檔案</div>
+        </div>
+
+        <input type="file" id="fileInput" accept=".html,.htm" multiple>
+
+        <div class="file-list" id="fileList"></div>
+
+        <div class="btn-container">
+            <button class="btn btn-secondary" id="clearBtn" disabled>清除檔案</button>
+            <button class="btn btn-primary" id="convertBtn" disabled>轉換並下載</button>
+        </div>
+
+        <div class="info-box">
+            <div class="info-title">轉換說明：</div>
+            <div>• 將旁白格式斜體轉換成粗體</div>
+            <div>• 支援批量處理多個檔案</div>
+            <div>• 原址：www.plurk.com/p/3i27utxumg</div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const convertBtn = document.getElementById('convertBtn');
+        const clearBtn = document.getElementById('clearBtn');
+
+        let selectedFiles = [];
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            const htmlFiles = Array.from(files).filter(file => 
+                file.name.endsWith('.html') || file.name.endsWith('.htm')
+            );
+
+            if (htmlFiles.length === 0) {
+                alert('請選擇 HTML 檔案！');
+                return;
+            }
+
+            selectedFiles = htmlFiles;
+            displayFiles();
+            convertBtn.disabled = false;
+            clearBtn.disabled = false;
+        }
+
+        function displayFiles() {
+            fileList.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-status status-ready">準備就緒</span>
+                `;
+                fileItem.dataset.index = index;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function clearFiles() {
+            selectedFiles = [];
+            fileList.innerHTML = '';
+            fileInput.value = '';
+            convertBtn.disabled = true;
+            clearBtn.disabled = true;
+        }
+
+        clearBtn.addEventListener('click', clearFiles);
+
+        convertBtn.addEventListener('click', async () => {
+            convertBtn.disabled = true;
+            
+            const searchText = '.ava-char {';
+            const replaceText = '.char .msg-content em, .pc .msg-content em{font-style:normal;font-weight:500;}\n    .ava-char {';
+
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                const fileItem = document.querySelectorAll('.file-item')[i];
+                const statusSpan = fileItem.querySelector('.file-status');
+
+                try {
+                    const content = await file.text();
+                    
+                    const newContent = content.replace(searchText, replaceText);
+                    
+                    const fileName = file.name;
+                    const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+                    const ext = fileName.substring(fileName.lastIndexOf('.'));
+                    const newFileName = `${nameWithoutExt}_BOLD${ext}`;
+                    
+                    const blob = new Blob([newContent], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = newFileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    statusSpan.textContent = '✓ 完成';
+                    statusSpan.className = 'file-status status-success';
+
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                } catch (error) {
+                    console.error('處理檔案時發生錯誤:', error);
+                    statusSpan.textContent = '✗ 失敗';
+                    statusSpan.style.background = '#ffebee';
+                    statusSpan.style.color = '#c62828';
+                }
+            }
+
+            convertBtn.disabled = false;
+        });
+    </script>
+</body>
+</html>
