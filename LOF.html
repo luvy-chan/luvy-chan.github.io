@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>繁簡與標點全自動轉換(LOF版)</title>
+    <title>繁簡標點轉換(LOF)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -83,7 +83,7 @@
                     '“': '「', '”': '」', '‘': '『', '’': '』'                  
                 };
 
-                result = result.replace(/[,.? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`“”‘’]/g, (match) => {
+                result = result.replace(/[,? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`“”‘’]/g, (match) => {
                     return punctMap[match] || match;
                 });
                 
@@ -109,7 +109,7 @@
                 }
                 
                 //
-                processed = text.replace(/(\n\s*){2,}/g, '\n');
+                processed = text.replace(/(\n\s*){2,}/g, '\n\n');
                 
                 // 步驟 2: 處理省略號
                 processed = processed.replace(/\.{6}/g, "……"); 
@@ -178,7 +178,7 @@
                         <div className="text-center space-y-2">
                             <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center justify-center gap-2">
                                 <IconType />
-                                繁簡與標點轉換（LOF）
+                                繁簡標點轉換（LOF）
                             </h1>
                             <p className="text-slate-500 text-sm md:text-base">
                                 支援 HTML 自動轉純文字 → 簡體轉繁體 → 半形標點轉為全形。
