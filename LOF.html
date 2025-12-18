@@ -96,17 +96,7 @@
             const handleConvert = (text) => {
                 let processed = text;
 
-                // 步驟 1: HTML 轉純文字 
-                if (processed.includes('<') || processed.includes('《')) {
-                    let htmlCleaned = processed.replace(/《/g, '<').replace(/》/g, '>'); 
-                    
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = htmlCleaned;
-                    
-                    processed = tempDiv.textContent || '';
-                    
-                    processed = processed.replace(/(\n\s*){2,}/g, '\n\n').trim(); 
-                }
+
 
 
                 // 無論是 2 個還是 6 個換行，通通轉成 1 個
