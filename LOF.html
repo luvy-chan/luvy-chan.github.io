@@ -98,9 +98,8 @@
 
 
 
-
-                // 無論是 2 個還是 6 個換行，通通轉成 1 個
-                processed = processed.replace(/\n{2,}/g, '\n'); 
+                // 步驟 1: 處理換行 確保包含空格的空行也會被抓到，並縮減為單個換行
+                let processed = text.replace(/(\n\s*){2,}/g, '\n');
                 
                 // 步驟 2: 處理省略號
                 processed = processed.replace(/\.{6}/g, "……"); 
