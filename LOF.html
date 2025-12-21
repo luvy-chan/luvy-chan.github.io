@@ -83,7 +83,7 @@
                     '“': '「', '”': '」', '‘': '『', '’': '』'                  
                 };
 
-                result = result.replace(/[,? !:;()\[\]{}<>\/\\|@#$%^&_+\-=~`“”‘’]/g, (match) => {
+                result = result.replace(/[,?!:;\[\]{}\/|~`“”‘’]/g, (match) => {
                     return punctMap[match] || match;
                 });
                 
